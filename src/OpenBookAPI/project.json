@@ -8,7 +8,8 @@
         "Microsoft.AspNet.Server.WebListener": "1.0.0-beta5",
         "Microsoft.AspNet.StaticFiles": "1.0.0-beta5",
         "Microsoft.AspNet.WebApi": "5.2.3",
-        "Swagger.Net.UI": "1.1.0"
+        "Swagger.Net.UI": "1.1.0",
+        "OpenBookAPI.Models": "1.0.0-*"
     },
 
     "commands": {
