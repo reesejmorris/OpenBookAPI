@@ -1,6 +1,6 @@
 {
     "version": "1.0.0-*",
-    "description": "OpenBookAPI.Models Class Library",
+    "description": "OpenBookAPI.Data.InMemory Class Library",
     "authors": [ "Reese" ],
     "tags": [ "" ],
     "projectUrl": "",
@@ -12,7 +12,9 @@
         "System.Threading": "4.0.10-beta-23019",
         "System.Runtime": "4.0.10-beta-23019",
         "Microsoft.CSharp": "4.0.0-beta-23019",
-        "OpenBookAPI.Logic.Interfaces": "1.0.0-*"
+        "OpenBookAPI.Data.Interfaces": "1.0.0-*",
+        "OpenBookAPI.Logic.Interfaces": "1.0.0-*",
+        "OpenBookAPI.Models": "1.0.0-*",
     },
 
     "frameworks": {

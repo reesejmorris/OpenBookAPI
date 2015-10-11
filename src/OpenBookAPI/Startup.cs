@@ -7,6 +7,10 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Routing;
 using Microsoft.Framework.DependencyInjection;
+using OpenBookAPI.Logic.Interfaces;
+using OpenBookAPI.Logic;
+using System.Web.Http;
+using OpenBookAPI.Data.Interfaces;
 
 namespace OpenBookAPI
 {
@@ -21,17 +25,20 @@ namespace OpenBookAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            // Uncomment the following line to add Web API services which makes it easier to port Web API 2 controllers.
-            // You will also need to add the Microsoft.AspNet.Mvc.WebApiCompatShim package to the 'dependencies' section of project.json.
-            // services.AddWebApiConventions();
+
+            //Dependancy Injection
+            services.AddTransient<ISnippetProvider, SnippetProvider>();
+            services.AddInstance(typeof(ISnippetRepository), new OpenBookAPI.Data.InMemory.SnippetRepository());
+
+
         }
 
         // Configure is called after ConfigureServices is called.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            //app.UseSwagger();
             // Configure the HTTP request pipeline.
             app.UseStaticFiles();
-
             // Add MVC to the request pipeline.
             app.UseMvc();
             // Add the following route for porting Web API 2 controllers.

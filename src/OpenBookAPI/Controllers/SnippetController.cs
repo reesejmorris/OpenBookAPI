@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNet.Mvc;
-using OpenBookAPI.Models;
+using OpenBookAPI.Logic.Interfaces;
+using System;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -9,33 +10,41 @@ namespace OpenBookAPI.Controllers
     [Route("api/[controller]")]
     public class SnippetController : Controller
     {
-        // GET: api/values
+        private ISnippetProvider SnippetProvider { get; set; }
+
+        public SnippetController(ISnippetProvider provider)
+        {
+            SnippetProvider = provider;
+        }
+
+        // GET: api/Snippet
         [HttpGet]
-        public IEnumerable<Snippet> Get()
+        public IEnumerable<ISnippet> Get()
         {
-            return new List<Snippet> { new Snippet { SnippetContent = "Here is a snippet of a story, good times!", SnippetAuthor = "Bob David" } };
+            
+            return SnippetProvider.GetStorySoFar();
         }
 
-        // GET api/values/5
+        // GET api/Snippet/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ISnippet Get(Guid id)
         {
-            return "value";
+            return SnippetProvider.GetSnippet(id);
         }
 
-        // POST api/values
+        // POST api/Snippet
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]ISnippet value)
         {
         }
 
-        // PUT api/values/5
+        // PUT api/Snippet/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/values/5
+        // DELETE api/Snippet/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
