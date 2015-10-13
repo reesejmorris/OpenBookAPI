@@ -7,7 +7,6 @@
         "Microsoft.AspNet.Server.IIS": "1.0.0-beta5",
         "Microsoft.AspNet.Server.WebListener": "1.0.0-beta5",
         "Microsoft.AspNet.StaticFiles": "1.0.0-beta5",
-        "Microsoft.AspNet.WebApi": "5.2.3",
         "OpenBookAPI.Logic": "1.0.0-*",
         "OpenBookAPI.Logic.Interfaces": "1.0.0-*",
         "OpenBookAPI.Data.InMemory": "1.0.0-*",
@@ -15,7 +14,7 @@
     },
 
     "commands": {
-        "web": "Microsoft.AspNet.Hosting --config hosting.ini",
+        "web": "Microsoft.AspNet.Hosting --config hosting.ini"
     },
 
     "frameworks": {

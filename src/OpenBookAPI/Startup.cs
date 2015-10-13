@@ -9,7 +9,6 @@ using Microsoft.AspNet.Routing;
 using Microsoft.Framework.DependencyInjection;
 using OpenBookAPI.Logic.Interfaces;
 using OpenBookAPI.Logic;
-using System.Web.Http;
 using OpenBookAPI.Data.Interfaces;
 
 namespace OpenBookAPI
