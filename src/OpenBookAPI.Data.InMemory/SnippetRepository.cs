@@ -11,7 +11,7 @@ namespace OpenBookAPI.Data.InMemory
     
     public class SnippetRepository:ISnippetRepository
     {
-        private IEnumerable<ISnippet> _dataContext;
+        private IEnumerable<Snippet> _dataContext;
 
         public SnippetRepository()
         {
@@ -46,20 +46,20 @@ namespace OpenBookAPI.Data.InMemory
                     DownVotes = 3
                 }
 
-            }.AsEnumerable<ISnippet>();
+            }.AsEnumerable<Snippet>();
         }
 
-        public ISnippet GetById(Guid id)
+        public Snippet GetById(Guid id)
         {
             return _dataContext.FirstOrDefault(s => s.Id == id);
         }
 
-        public IEnumerable<ISnippet> GetByStory(Guid Id)
+        public IEnumerable<Snippet> GetByStory(Guid Id)
         {
             return _dataContext.Where(a=>a.StoryId == Id);
         }
 
-        public IEnumerable<ISnippet> GetSubmissionsByStory(Guid Id)
+        public IEnumerable<Snippet> GetSubmissionsByStory(Guid Id)
         {
             throw new NotImplementedException();
         }

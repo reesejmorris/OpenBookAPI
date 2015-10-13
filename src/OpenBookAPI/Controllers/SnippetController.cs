@@ -2,8 +2,7 @@
 using Microsoft.AspNet.Mvc;
 using OpenBookAPI.Logic.Interfaces;
 using System;
-
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+using OpenBookAPI.Models;
 
 namespace OpenBookAPI.Controllers
 {
@@ -19,7 +18,7 @@ namespace OpenBookAPI.Controllers
 
         // GET: api/Snippet
         [HttpGet]
-        public IEnumerable<ISnippet> Get()
+        public IEnumerable<Snippet> Get()
         {
             
             return SnippetProvider.GetStorySoFar();
@@ -27,14 +26,14 @@ namespace OpenBookAPI.Controllers
 
         // GET api/Snippet/5
         [HttpGet("{id}")]
-        public ISnippet Get(Guid id)
+        public Snippet Get(Guid id)
         {
             return SnippetProvider.GetSnippet(id);
         }
 
         // POST api/Snippet
         [HttpPost]
-        public void Post([FromBody]ISnippet value)
+        public void Post([FromBody]Snippet value)
         {
         }
 

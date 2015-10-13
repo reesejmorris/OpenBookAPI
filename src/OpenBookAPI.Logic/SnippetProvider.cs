@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using OpenBookAPI.Logic.Interfaces;
 using OpenBookAPI.Data.Interfaces;
+using OpenBookAPI.Models;
 
 namespace OpenBookAPI.Logic
 {
@@ -14,12 +15,12 @@ namespace OpenBookAPI.Logic
         {
             _repository = repository;
         }
-        public ISnippet GetSnippet(Guid id)
+        public Snippet GetSnippet(Guid id)
         {
             return _repository.GetById(id);
         }
 
-        public IEnumerable<ISnippet> GetStorySoFar()
+        public IEnumerable<Snippet> GetStorySoFar()
         {
             var currentStory = new Guid();
             return _repository.GetByStory(currentStory);

@@ -1,9 +1,8 @@
 ﻿using System;
-using OpenBookAPI.Logic.Interfaces;
 
 namespace OpenBookAPI.Models
 {
-    public class Snippet:ISnippet
+    public class Snippet
     {
         private Guid storyId;
 
