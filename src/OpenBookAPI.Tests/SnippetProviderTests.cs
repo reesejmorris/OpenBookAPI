@@ -22,10 +22,14 @@ namespace OpenBookAPI.Tests
             _provider = new SnippetProvider(_repo);
         }
         [Fact]
+        public void GetSnippetWithEmptyGuidShouldReturnNull()
+        {
+            Assert.Null(_provider.GetSnippet(Guid.Empty));
+        }
+        [Fact]
         public void GetSnippetShouldReturnSnippet()
         {
-            
-            Assert.IsType<Snippet>(_provider.GetSnippet(Guid.Empty));
+            Assert.IsType<Snippet>(_provider.GetSnippet(new Guid("1227e500-071c-48ef-b92d-690a99d0ec21")));
         }
     }
 }

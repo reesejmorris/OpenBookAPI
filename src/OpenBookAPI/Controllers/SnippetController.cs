@@ -21,7 +21,7 @@ namespace OpenBookAPI.Controllers
         public IEnumerable<Snippet> Get()
         {
             
-            return SnippetProvider.GetStorySoFar();
+            return SnippetProvider.GetSnippets();
         }
 
         // GET api/Snippet/5

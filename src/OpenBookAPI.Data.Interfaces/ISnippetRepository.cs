@@ -8,7 +8,8 @@ namespace OpenBookAPI.Data.Interfaces
     public interface ISnippetRepository
     {
         Snippet GetById(Guid id);
+        IEnumerable<Snippet> GetAll();
         IEnumerable<Snippet> GetByStory(Guid Id);
-        IEnumerable<Snippet> GetSubmissionsByStory(Guid Id);
+        IEnumerable<Snippet> GetBySubmissionPeriodId(Guid Id);
     }
 }
