@@ -9,7 +9,6 @@ using Microsoft.AspNet.Routing;
 using Microsoft.Framework.DependencyInjection;
 using OpenBookAPI.Logic.Interfaces;
 using OpenBookAPI.Logic;
-using OpenBookAPI.Data.Interfaces;
 
 namespace OpenBookAPI
 {
@@ -25,10 +24,16 @@ namespace OpenBookAPI
         {
             services.AddMvc();
 
-            //Dependancy Injection
-            services.AddTransient<ISnippetProvider, SnippetProvider>();
-            services.AddInstance(typeof(ISnippetRepository), new OpenBookAPI.Data.InMemory.SnippetRepository());
+            //CORS -- temporary currently allow anyone to connect
+            var OpenBookAPIcors = new Microsoft.AspNet.Cors.Core.CorsPolicy();
+            OpenBookAPIcors.Headers.Add("*");
+            OpenBookAPIcors.Origins.Add("*");
+            OpenBookAPIcors.Methods.Add("*");
 
+            services.ConfigureCors(cors => cors.AddPolicy("OpenBookAPI", OpenBookAPIcors));
+
+            //Dependancy Injection
+            Modules.Register(services);
 
         }
 

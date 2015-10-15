@@ -1,4 +1,5 @@
-﻿using OpenBookAPI.Models;
+﻿using OpenBookAPI.Data.Interfaces;
+using OpenBookAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,11 @@ namespace OpenBookAPI.Data.InMemory
         public Story GetById(Guid id)
         {
             return _dataContext.FirstOrDefault(s => s.Id == id);
+        }
+
+        public IEnumerable<Story> GetAll()
+        {
+            return _dataContext;
         }
     }
 }

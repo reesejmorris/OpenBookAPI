@@ -1,4 +1,5 @@
-﻿using OpenBookAPI.Models;
+﻿using OpenBookAPI.Data.Interfaces;
+using OpenBookAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,11 @@ namespace OpenBookAPI.Data.InMemory
         public SubmissionPeriod GetById(Guid submissionPeriodId)
         {
             return _dataContext.FirstOrDefault(sp=>sp.Id == submissionPeriodId);
+        }
+
+        public IEnumerable<SubmissionPeriod> GetAll()
+        {
+            return _dataContext;
         }
 
         public IEnumerable<SubmissionPeriod> GetByStoryId(Guid storyId)

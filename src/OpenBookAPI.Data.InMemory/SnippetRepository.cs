@@ -70,5 +70,30 @@ namespace OpenBookAPI.Data.InMemory
         {
             return _dataContext.Where(sp => sp.SubmissionPeriodId == submissionPeriodId);
         }
+
+        public Snippet Create(Snippet snippet)
+        {
+            snippet.Id = new Guid();
+            (_dataContext as List<Snippet>).Add(snippet);
+            return snippet;
+        }
+
+        public Snippet Update(Snippet snippet)
+        {
+            var old = GetById(snippet.Id);
+            if (old == null)
+                return null;
+            (_dataContext as List<Snippet>).Remove(old);
+            (_dataContext as List<Snippet>).Add(snippet);
+            return snippet;
+        }
+
+        public bool Delete(Guid id)
+        {
+            var old = GetById(id);
+            if (old == null)
+                return false;
+            return (_dataContext as List<Snippet>).Remove(old);
+        }
     }
 }

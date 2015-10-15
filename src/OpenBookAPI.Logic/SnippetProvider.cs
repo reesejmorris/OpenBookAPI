@@ -24,6 +24,20 @@ namespace OpenBookAPI.Logic
         {
             return _repository.GetById(id);
         }
-        
+
+        public Snippet SubmitSnippet(Snippet snippet)
+        {
+            return _repository.Create(snippet);
+        }
+
+        public Snippet UpdateSnippet(Snippet snippet)
+        {
+            return _repository.Update(snippet);
+        }
+
+        public bool DeleteSnippet(Guid id)
+        {
+            return _repository.Delete(id);
+        }
     }
 }

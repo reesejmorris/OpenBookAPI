@@ -20,12 +20,11 @@ namespace OpenBookAPI.Controllers
         [HttpGet]
         public IEnumerable<Snippet> Get()
         {
-            
             return SnippetProvider.GetSnippets();
         }
 
-        // GET api/Snippet/5
-        [HttpGet("{id}")]
+        // GET api/Snippet/{id:Guid}
+        [HttpGet("{id:Guid}")]
         public Snippet Get(Guid id)
         {
             return SnippetProvider.GetSnippet(id);
@@ -33,20 +32,23 @@ namespace OpenBookAPI.Controllers
 
         // POST api/Snippet
         [HttpPost]
-        public void Post([FromBody]Snippet value)
+        public Snippet Post([FromBody]Snippet snippet)
         {
+            return SnippetProvider.SubmitSnippet(snippet);
         }
 
-        // PUT api/Snippet/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        // PUT api/Snippet/{id:Guid}
+        [HttpPut("{id:Guid}")]
+        public Snippet Put(Guid id, [FromBody]Snippet snippet)
         {
+            return SnippetProvider.UpdateSnippet(snippet);
         }
 
-        // DELETE api/Snippet/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // DELETE api/Snippet/{id:Guid}
+        [HttpDelete("{id:Guid}")]
+        public bool Delete(Guid id)
         {
+            return SnippetProvider.DeleteSnippet(id);
         }
     }
 }

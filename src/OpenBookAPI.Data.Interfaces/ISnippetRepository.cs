@@ -9,7 +9,10 @@ namespace OpenBookAPI.Data.Interfaces
     {
         Snippet GetById(Guid id);
         IEnumerable<Snippet> GetAll();
-        IEnumerable<Snippet> GetByStory(Guid Id);
-        IEnumerable<Snippet> GetBySubmissionPeriodId(Guid Id);
+        IEnumerable<Snippet> GetByStory(Guid id);
+        IEnumerable<Snippet> GetBySubmissionPeriodId(Guid id);
+        Snippet Create(Snippet snippet);
+        Snippet Update(Snippet snippet);
+        bool Delete(Guid id);
     }
 }
