@@ -3,9 +3,11 @@ using Microsoft.AspNet.Mvc;
 using OpenBookAPI.Logic.Interfaces;
 using System;
 using OpenBookAPI.Models;
+using Microsoft.AspNet.Cors.Core;
 
 namespace OpenBookAPI.Controllers
 {
+    [EnableCors("OpenBookAPI")]
     [Route("api/[controller]")]
     public class SnippetController : Controller
     {

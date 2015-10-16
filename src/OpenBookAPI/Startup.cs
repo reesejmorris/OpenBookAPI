@@ -29,11 +29,14 @@ namespace OpenBookAPI
             OpenBookAPIcors.Headers.Add("*");
             OpenBookAPIcors.Origins.Add("*");
             OpenBookAPIcors.Methods.Add("*");
+            OpenBookAPIcors.SupportsCredentials = true;
+
+            Modules.Register(services);
 
             services.ConfigureCors(cors => cors.AddPolicy("OpenBookAPI", OpenBookAPIcors));
 
             //Dependancy Injection
-            Modules.Register(services);
+            
 
         }
 
