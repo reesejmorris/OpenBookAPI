@@ -11,11 +11,11 @@ namespace OpenBookAPI.Data.InMemory
     
     public class SnippetRepository:ISnippetRepository
     {
-        private IEnumerable<Snippet> _dataContext;
+        private List<Snippet> _dataContext;
 
         public SnippetRepository()
         {
-            _dataContext = new[]
+            _dataContext = new List<Snippet>
             {
                 new Snippet{
                     Id = new Guid("ba0088dd-587d-4e16-a338-2446abfe459b"),
@@ -49,7 +49,7 @@ namespace OpenBookAPI.Data.InMemory
                     SubmissionPeriodId = new Guid("3f6945fe-83e4-478b-8dd4-9ffbc66a9f35")
                 }
 
-            }.AsEnumerable<Snippet>();
+            };
         }
 
         public Snippet GetById(Guid snippetId)
@@ -74,7 +74,7 @@ namespace OpenBookAPI.Data.InMemory
         public Snippet Create(Snippet snippet)
         {
             snippet.Id = new Guid();
-            (_dataContext as List<Snippet>).Add(snippet);
+            _dataContext.Add(snippet);
             return snippet;
         }
 
