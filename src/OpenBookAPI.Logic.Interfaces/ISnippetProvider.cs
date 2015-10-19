@@ -18,8 +18,14 @@ namespace OpenBookAPI.Logic.Interfaces
         /// Gets a <see cref="Snippet"/>
         /// </summary>
         /// <param name="id">the <see cref="Snippet"/> Id</param>
-        /// <returns>an <see cref="Snippet"/>></returns>
+        /// <returns>an <see cref="Snippet"/></returns>
         Snippet GetSnippet(Guid id);
+
+        /// <summary>
+        /// Gets snippets for a story
+        /// </summary>
+        /// <returns>an <see cref="IEnumerable{T}"/> of <see cref="Snippet"/></returns>
+        IEnumerable<Snippet> GetSnippetsForStory(Guid storyId);
 
         /// <summary>
         /// Attempts to create a <see cref="Snippet"/>
@@ -41,5 +47,6 @@ namespace OpenBookAPI.Logic.Interfaces
         /// <param name="id"><see cref="Guid"/> of snippet to delete</param>
         /// <returns></returns>
         bool DeleteSnippet(Guid id);
+        IEnumerable<Snippet> GetSnippetsForSubmissionPeriod(Guid submissionPeriodId);
     }
 }

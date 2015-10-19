@@ -16,6 +16,11 @@ namespace OpenBookAPI.Logic
         {
             _repository = repository;
         }
+
+        public IEnumerable<Snippet> GetSnippetsForStory(Guid storyId)
+        {
+            return _repository.GetByStory(storyId);
+        }
         public IEnumerable<Snippet> GetSnippets()
         {
             return _repository.GetAll();
@@ -38,6 +43,11 @@ namespace OpenBookAPI.Logic
         public bool DeleteSnippet(Guid id)
         {
             return _repository.Delete(id);
+        }
+
+        public IEnumerable<Snippet> GetSnippetsForSubmissionPeriod(Guid submissionPeriodId)
+        {
+            return _repository.GetBySubmissionPeriodId(submissionPeriodId);
         }
     }
 }

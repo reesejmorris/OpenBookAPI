@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Routing;
 using Microsoft.Framework.DependencyInjection;
-using OpenBookAPI.Logic.Interfaces;
-using OpenBookAPI.Logic;
+
 
 namespace OpenBookAPI
 {
@@ -30,26 +25,22 @@ namespace OpenBookAPI
             OpenBookAPIcors.Origins.Add("*");
             OpenBookAPIcors.Methods.Add("*");
             OpenBookAPIcors.SupportsCredentials = true;
-
-            Modules.Register(services);
-
             services.ConfigureCors(cors => cors.AddPolicy("OpenBookAPI", OpenBookAPIcors));
 
             //Dependancy Injection
-            
+            Modules.Register(services);
 
+            //Swagger
+            //services.AddSwagger();
         }
 
         // Configure is called after ConfigureServices is called.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //app.UseSwagger();
-            // Configure the HTTP request pipeline.
             app.UseStaticFiles();
-            // Add MVC to the request pipeline.
             app.UseMvc();
-            // Add the following route for porting Web API 2 controllers.
-            // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
+            //app.UseSwagger();
+            //app.UseSwaggerUi();
         }
     }
 }

@@ -9,10 +9,10 @@ namespace OpenBookAPI.Data.InMemory
 {
     public class SubmissionPeriodRepository : ISubmissionPeriodRepository
     {
-        private IEnumerable<SubmissionPeriod> _dataContext;
+        private List<SubmissionPeriod> _dataContext;
         public SubmissionPeriodRepository()
         {
-            _dataContext = new[]
+            _dataContext = new List<SubmissionPeriod>
             {
                 new SubmissionPeriod
                 {

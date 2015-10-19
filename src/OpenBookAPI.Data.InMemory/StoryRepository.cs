@@ -9,10 +9,10 @@ namespace OpenBookAPI.Data.InMemory
 {
     public class StoryRepository : IStoryRepository
     {
-        private IEnumerable<Story> _dataContext;
+        private List<Story> _dataContext;
         public StoryRepository()
         {
-            _dataContext = new[]
+            _dataContext = new List<Story>
             {
                 new Story
                 {

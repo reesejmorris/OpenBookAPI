@@ -83,8 +83,8 @@ namespace OpenBookAPI.Data.InMemory
             var old = GetById(snippet.Id);
             if (old == null)
                 return null;
-            (_dataContext as List<Snippet>).Remove(old);
-            (_dataContext as List<Snippet>).Add(snippet);
+            _dataContext.Remove(old);
+            _dataContext.Add(snippet);
             return snippet;
         }
 
@@ -93,7 +93,7 @@ namespace OpenBookAPI.Data.InMemory
             var old = GetById(id);
             if (old == null)
                 return false;
-            return (_dataContext as List<Snippet>).Remove(old);
+            return _dataContext.Remove(old);
         }
     }
 }
