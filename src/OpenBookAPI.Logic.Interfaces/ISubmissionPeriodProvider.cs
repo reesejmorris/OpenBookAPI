@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using OpenBookAPI.Models;
 
-namespace OpenBookAPI.Data.Interfaces
+namespace OpenBookAPI.Logic.Interfaces
 {
     public interface ISubmissionPeriodProvider
     {

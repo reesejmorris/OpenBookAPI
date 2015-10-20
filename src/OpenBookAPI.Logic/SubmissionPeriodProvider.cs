@@ -1,4 +1,5 @@
 ﻿using OpenBookAPI.Data.Interfaces;
+using OpenBookAPI.Logic.Interfaces;
 using OpenBookAPI.Models;
 using System;
 using System.Collections.Generic;
