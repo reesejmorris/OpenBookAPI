@@ -1,0 +1,23 @@
+{
+  "version": "1.0.0-*",
+  "description": "OpenBookAPI.Data.RavenDB Class Library",
+  "authors": [ "john.bradshaw" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "dependencies": {
+    "System.Collections": "4.0.10-beta-23019",
+    "System.Linq": "4.0.0-beta-23019",
+    "System.Threading": "4.0.10-beta-23019",
+    "System.Runtime": "4.0.10-beta-23019",
+    "RavenDB.Client": "3.0.3819-Unstable",
+    "Microsoft.CSharp": "4.0.0-beta-23019",
+    "OpenBookAPI.Data.Interfaces": "1.0.0-*",
+    "OpenBookAPI.Models": "1.0.0-*"
+  },
+
+    "frameworks": {
+        "dotnet": { }
+    }
+}

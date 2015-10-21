@@ -11,7 +11,6 @@ namespace OpenBookAPI.Models
         public virtual bool NewParagraph { get; set; }
         public virtual string Content { get; set; }
         public virtual string Author { get; set; }
-        public virtual int UpVotes { get; set; }
-        public virtual int DownVotes { get; set; }
+        public virtual int Score { get; set; }
     }
 }

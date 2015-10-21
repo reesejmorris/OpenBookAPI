@@ -24,8 +24,7 @@ namespace OpenBookAPI.Data.InMemory
                     NewParagraph = false,
                     StoryId = new Guid("8e733419-c6a3-4b59-8d5a-8784c1b61724"),
                     SubmissionDate = new DateTime(2015,10,11),
-                    UpVotes = 10,
-                    DownVotes = 1,
+                    Score = 10,
                     SubmissionPeriodId = new Guid("3f6945fe-83e4-478b-8dd4-9ffbc66a9f35")
                 },new Snippet{
                     Id = new Guid("5d6932f8-5886-4723-8eb8-c243c40da684"),
@@ -34,8 +33,7 @@ namespace OpenBookAPI.Data.InMemory
                     NewParagraph = false,
                     StoryId = new Guid("8e733419-c6a3-4b59-8d5a-8784c1b61724"),
                     SubmissionDate = new DateTime(2015,10,11,6,0,0),
-                    UpVotes = 5,
-                    DownVotes = 0,
+                    Score = 5,
                     SubmissionPeriodId = new Guid("3f6945fe-83e4-478b-8dd4-9ffbc66a9f35")
                 },new Snippet{
                     Id = new Guid("1227e500-071c-48ef-b92d-690a99d0ec21"),
@@ -44,8 +42,7 @@ namespace OpenBookAPI.Data.InMemory
                     NewParagraph = true,
                     StoryId = new Guid("8e733419-c6a3-4b59-8d5a-8784c1b61724"),
                     SubmissionDate = new DateTime(2015,10,11,12,0,0),
-                    UpVotes = 0,
-                    DownVotes = 3,
+                    Score = 0,
                     SubmissionPeriodId = new Guid("3f6945fe-83e4-478b-8dd4-9ffbc66a9f35")
                 }
 
