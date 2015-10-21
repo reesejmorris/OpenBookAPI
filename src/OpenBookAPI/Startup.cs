@@ -32,6 +32,20 @@ namespace OpenBookAPI
 
             //Swagger
             //services.AddSwagger();
+
+            //Configure Auth policies
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("registeredOnly", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                });
+                options.AddPolicy("adminOnly", policy =>
+                {
+                    policy.RequireClaim("role", "admin");
+                });
+            });
+            services.AddAuthentication();
         }
 
         // Configure is called after ConfigureServices is called.
