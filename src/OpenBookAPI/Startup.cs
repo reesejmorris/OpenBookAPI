@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Framework.DependencyInjection;
-
+using Microsoft.AspNet.Http;
 
 namespace OpenBookAPI
 {
@@ -41,6 +41,14 @@ namespace OpenBookAPI
             app.UseMvc();
             //app.UseSwagger();
             //app.UseSwaggerUi();
+
+            app.UseOAuthBearerAuthentication(options => {
+                options.AutomaticAuthentication = true;
+                options.Audience = "http://localhost:44300/";
+                // Authority is only useful if your JWT tokens
+                // are issued by an OpenID Connect server.
+                options.Authority = "https://accounts.google.com/.well-known/openid-configuration";
+            });
         }
     }
 }

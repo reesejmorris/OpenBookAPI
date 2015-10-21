@@ -4,6 +4,7 @@ using OpenBookAPI.Logic.Interfaces;
 using System;
 using OpenBookAPI.Models;
 using Microsoft.AspNet.Cors.Core;
+using Microsoft.AspNet.Authorization;
 
 namespace OpenBookAPI.Controllers
 {
