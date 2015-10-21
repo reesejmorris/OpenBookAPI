@@ -4,6 +4,7 @@ using OpenBookAPI.Logic.Interfaces;
 using System;
 using OpenBookAPI.Models;
 using Microsoft.AspNet.Cors.Core;
+using Microsoft.AspNet.Authorization;
 
 namespace OpenBookAPI.Controllers
 {
@@ -11,15 +12,16 @@ namespace OpenBookAPI.Controllers
     [Route("api/[controller]")]
     public class SnippetController : Controller
     {
-        private ISnippetProvider SnippetProvider { get; set; }
-
+        private ISnippetProvider snippetProvider { get; set; }
+        private IVoteProvider voteProvider { get; set; }
         /// <summary>
         /// Snippet Controller constructor
         /// </summary>
         /// <param name="provider">The injected <see cref="ISnippetProvider"/></param>
-        public SnippetController(ISnippetProvider provider)
+        public SnippetController(ISnippetProvider snippetprovider, IVoteProvider voteprovider)
         {
-            SnippetProvider = provider;
+            snippetProvider = snippetprovider;
+            voteProvider = voteprovider;
         }
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace OpenBookAPI.Controllers
         [HttpGet]
         public IEnumerable<Snippet> Get()
         {
-            return SnippetProvider.GetSnippets();
+            return snippetProvider.GetSnippets();
         }
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace OpenBookAPI.Controllers
         [HttpGet("{id:Guid}")]
         public Snippet Get(Guid id)
         {
-            return SnippetProvider.GetSnippet(id);
+            return snippetProvider.GetSnippet(id);
         }
         /// <summary>
         /// Gets all the <see cref="Snippet"/>s for a story
@@ -53,7 +55,7 @@ namespace OpenBookAPI.Controllers
         [HttpGet("~/api/story/{story_id:Guid}/snippet")]
         public IEnumerable<Snippet> GetByStoryId(Guid story_id)
         {
-            return SnippetProvider.GetSnippetsForStory(story_id);
+            return snippetProvider.GetSnippetsForStory(story_id);
         }
 
         /// <summary>
@@ -65,7 +67,7 @@ namespace OpenBookAPI.Controllers
         [HttpGet("~/api/submissionperiod/{submissionPeriodId:Guid}/snippet")]
         public IEnumerable<Snippet> GetBySubmissionPeriodId(Guid submissionPeriodId)
         {
-            return SnippetProvider.GetSnippetsForSubmissionPeriod(submissionPeriodId);
+            return snippetProvider.GetSnippetsForSubmissionPeriod(submissionPeriodId);
         }
 
         /// <summary>
@@ -77,7 +79,7 @@ namespace OpenBookAPI.Controllers
         [HttpPost]
         public Snippet Post([FromBody]Snippet snippet)
         {
-            return SnippetProvider.SubmitSnippet(snippet);
+            return snippetProvider.SubmitSnippet(snippet);
         }
 
         /// <summary>
@@ -90,7 +92,7 @@ namespace OpenBookAPI.Controllers
         [HttpPut("{id:Guid}")]
         public Snippet Put(Guid id, [FromBody]Snippet snippet)
         {
-            return SnippetProvider.UpdateSnippet(snippet);
+            return snippetProvider.UpdateSnippet(snippet);
         }
 
         /// <summary>
@@ -102,7 +104,27 @@ namespace OpenBookAPI.Controllers
         [HttpDelete("{id:Guid}")]
         public bool Delete(Guid id)
         {
-            return SnippetProvider.DeleteSnippet(id);
+            return snippetProvider.DeleteSnippet(id);
+        }
+        /// <summary>
+        /// Register a new downvote on a snippet (Set ContentLength header to 0 when posting to this endpoint)
+        /// </summary>
+        /// <param name="id">Snippet Id</param>
+        /// <returns><see cref="int"/> Score</returns>
+        [HttpPost("{id:Guid}/UpVote")]
+        public int UpVote(Guid id)
+        {
+            return voteProvider.UpVote(id);
+        }
+        /// <summary>
+        /// Register a new upvote on a snippet (Set ContentLength header to 0 when posting to this endpoint)
+        /// </summary>
+        /// <param name="id">Snippet Id</param>
+        /// <returns><see cref="int"/> Score</returns>
+        [HttpPost("{id:Guid}/DownVote")]
+        public int DownVote(Guid id)
+        {
+            return voteProvider.DownVote(id);
         }
     }
 }
