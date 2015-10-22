@@ -4,6 +4,11 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.AspNet.Http;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Authentication;
+using Microsoft.AspNet.Authentication.Notifications;
+using Microsoft.Framework.Logging;
+using Microsoft.AspNet.Authentication.Cookies;
 
 namespace OpenBookAPI
 {
@@ -45,24 +50,24 @@ namespace OpenBookAPI
                     policy.RequireClaim("role", "admin");
                 });
             });
-            services.AddAuthentication();
         }
 
         // Configure is called after ConfigureServices is called.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
         {
             app.UseStaticFiles();
-            app.UseMvc();
             //app.UseSwagger();
             //app.UseSwaggerUi();
-
-            app.UseOAuthBearerAuthentication(options => {
-                options.AutomaticAuthentication = true;
-                options.Audience = "http://localhost:44300/";
-                // Authority is only useful if your JWT tokens
-                // are issued by an OpenID Connect server.
-                options.Authority = "https://accounts.google.com/.well-known/openid-configuration";
+            logger.AddConsole();
+            app.UseOpenIdConnectAuthentication(options =>
+            {
+                options.Authority = "https://accounts.google.com/";
+                options.ClientId = "336092105680-uattl87g384j7n5ibfid4v10c7pcerkp.apps.googleusercontent.com";
+                options.ClientSecret = "PaZLmNwOCY_N-HUZKIEStabp";
             });
+
+            //should go at the end
+            app.UseMvc();
         }
     }
 }
