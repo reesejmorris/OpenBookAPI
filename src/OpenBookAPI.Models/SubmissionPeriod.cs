@@ -21,5 +21,16 @@ namespace OpenBookAPI.Models
         /// the position of the chosen snippet in the story
         /// </summary>
         public int Location { get; set; }
+
+        /// <summary>
+        /// the status of the submissionperiod
+        /// </summary>
+        public SubmissionPeriodStatus Status { get; set; }
+    }
+
+    public enum SubmissionPeriodStatus
+    {
+        Open = 0,
+        Closed = 1
     }
 }

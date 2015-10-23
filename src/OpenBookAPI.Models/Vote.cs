@@ -20,10 +20,6 @@ namespace OpenBookAPI.Models
         /// <summary>
         /// Id of user who registered the vote, so we can stop people voting on an item more than once
         /// </summary>
-        public Guid? UserId { get; set; }
-        /// <summary>
-        /// Id for logged out users 
-        /// </summary>
-        public string CookieId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

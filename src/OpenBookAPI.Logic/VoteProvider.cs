@@ -38,8 +38,7 @@ namespace OpenBookAPI.Logic
             {
                 ItemId = ItemId,
                 Value = value,
-                UserId = new Guid(),    //get from base 
-                CookieId = string.Empty,//^^^^^^^^^^^^^
+                UserId = Guid.NewGuid()    //get from base 
             });
         }
 
@@ -54,7 +53,7 @@ namespace OpenBookAPI.Logic
             if (snippet == null)
                 return 0;  //No Snippet return zero
             
-            if (_voteRepository.GetByItemId(newVote.ItemId).Count(v => (v.UserId == newVote.UserId) || (v.CookieId == newVote.CookieId)) > 0)
+            if (_voteRepository.GetByItemId(newVote.ItemId).Count(v => v.UserId == newVote.UserId) > 0)
                 return snippet.Score;  //Already voted return current score
 
             //create the vote

@@ -53,13 +53,13 @@ namespace OpenBookAPI.Controllers
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Snippet"/>s</returns>
         // GET api/story/{story_id:Guid}/snippet
         [HttpGet("~/api/story/{story_id:Guid}/ChosenSnippets")]
-        public IEnumerable<Snippet> GetByStoryId(Guid story_id)
+        public IEnumerable<Snippet> GetChosenByStoryId(Guid story_id)
         {
             return snippetProvider.GetChosenSnippetsForStory(story_id);
         }
 
         /// <summary>
-        /// Gets all the <see cref="Snippet"/>s for a story
+        /// Gets all the <see cref="Snippet"/>s for a submission period
         /// </summary>
         /// <param name="story_id">The <see cref="Guid"/> of the story</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Snippet"/>s</returns>
@@ -68,6 +68,18 @@ namespace OpenBookAPI.Controllers
         public IEnumerable<Snippet> GetBySubmissionPeriodId(Guid submissionPeriodId)
         {
             return snippetProvider.GetSnippetsForSubmissionPeriod(submissionPeriodId);
+        }
+
+        /// <summary>
+        /// Gets all the <see cref="Snippet"/>s for a story
+        /// </summary>
+        /// <param name="story_id">The <see cref="Guid"/> of the story</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Snippet"/>s</returns>
+        // GET api/story/{story_id:Guid}/snippet
+        [HttpGet("~/api/story/{storyId:Guid}/snippet")]
+        public IEnumerable<Snippet> GetByStoryId(Guid storyId)
+        {
+            return snippetProvider.GetSnippetsForStory(storyId);
         }
 
         /// <summary>

@@ -108,7 +108,7 @@ namespace OpenBookAPI.Data.InMemory
 
         public Snippet Create(Snippet snippet)
         {
-            snippet.Id = new Guid();
+            snippet.Id = Guid.NewGuid();
             _dataContext.Add(snippet);
             return snippet;
         }
