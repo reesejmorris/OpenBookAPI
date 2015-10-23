@@ -4,13 +4,22 @@ namespace OpenBookAPI.Models
 {
     public class Snippet
     {
-        public virtual Guid StoryId { get; set; }
-        public virtual Guid SubmissionPeriodId { get; set; }
-        public virtual Guid Id { get; set; }
-        public virtual DateTime SubmissionDate { get; set; }
-        public virtual bool NewParagraph { get; set; }
-        public virtual string Content { get; set; }
-        public virtual string Author { get; set; }
-        public virtual int Score { get; set; }
+        public Guid StoryId { get; set; }
+        public Guid SubmissionPeriodId { get; set; }
+        public Guid Id { get; set; }
+        public DateTime SubmissionDate { get; set; }
+        public bool NewParagraph { get; set; }
+        public string Content { get; set; }
+        public string Author { get; set; }
+        public int Score { get; set; }
+        public SnippetStatus Status { get; set; }
+
+    }
+
+    public enum SnippetStatus
+    {
+        Submitted = 0,
+        Chosen = 1,
+        Rejected = 2,
     }
 }

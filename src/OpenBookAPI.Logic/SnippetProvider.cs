@@ -16,10 +16,13 @@ namespace OpenBookAPI.Logic
         {
             _repository = repository;
         }
-
         public IEnumerable<Snippet> GetSnippetsForStory(Guid storyId)
         {
             return _repository.GetByStory(storyId);
+        }
+        public IEnumerable<Snippet> GetChosenSnippetsForStory(Guid storyId)
+        {
+            return _repository.GetByStory(storyId).Where(s=>s.Status == SnippetStatus.Chosen);
         }
         public IEnumerable<Snippet> GetSnippets()
         {

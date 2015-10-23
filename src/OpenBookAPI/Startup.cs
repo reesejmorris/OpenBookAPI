@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.Notifications;
 using Microsoft.Framework.Logging;
-using Microsoft.AspNet.Authentication.Cookies;
 
 namespace OpenBookAPI
 {
@@ -58,13 +57,13 @@ namespace OpenBookAPI
             app.UseStaticFiles();
             //app.UseSwagger();
             //app.UseSwaggerUi();
-            logger.AddConsole();
-            app.UseOpenIdConnectAuthentication(options =>
-            {
-                options.Authority = "https://accounts.google.com/";
-                options.ClientId = "336092105680-uattl87g384j7n5ibfid4v10c7pcerkp.apps.googleusercontent.com";
-                options.ClientSecret = "PaZLmNwOCY_N-HUZKIEStabp";
-            });
+
+            //app.UseOpenIdConnectAuthentication(options =>
+            //{
+            //    options.Authority = "https://accounts.google.com/";
+            //    options.ClientId = "336092105680-uattl87g384j7n5ibfid4v10c7pcerkp.apps.googleusercontent.com";
+            //    options.ClientSecret = "PaZLmNwOCY_N-HUZKIEStabp";
+            //});
 
             //should go at the end
             app.UseMvc();

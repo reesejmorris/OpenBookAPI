@@ -52,10 +52,10 @@ namespace OpenBookAPI.Controllers
         /// <param name="story_id">The <see cref="Guid"/> of the story</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Snippet"/>s</returns>
         // GET api/story/{story_id:Guid}/snippet
-        [HttpGet("~/api/story/{story_id:Guid}/snippet")]
+        [HttpGet("~/api/story/{story_id:Guid}/ChosenSnippets")]
         public IEnumerable<Snippet> GetByStoryId(Guid story_id)
         {
-            return snippetProvider.GetSnippetsForStory(story_id);
+            return snippetProvider.GetChosenSnippetsForStory(story_id);
         }
 
         /// <summary>

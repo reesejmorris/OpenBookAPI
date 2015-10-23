@@ -15,6 +15,11 @@ namespace OpenBookAPI.Data.InMemory
 
         public SnippetRepository()
         {
+            Guid storyId = new Guid("8e733419-c6a3-4b59-8d5a-8784c1b61724");
+            Guid submission1 = new Guid("3f6945fe-83e4-478b-8dd4-9ffbc66a9f35");
+            Guid submission2 = new Guid("cbe0ee1b-04fc-4502-92e6-652537f58965"); 
+            Guid submission3 =new Guid("233ae5e6-6333-4874-bb64-93585f05d26d");
+
             _dataContext = new List<Snippet>
             {
                 new Snippet{
@@ -22,30 +27,63 @@ namespace OpenBookAPI.Data.InMemory
                     Content = "Once upon a time there was a little boy named Reese,",
                     Author = "John",
                     NewParagraph = false,
-                    StoryId = new Guid("8e733419-c6a3-4b59-8d5a-8784c1b61724"),
+                    StoryId = storyId,
                     SubmissionDate = new DateTime(2015,10,11),
                     Score = 10,
-                    SubmissionPeriodId = new Guid("3f6945fe-83e4-478b-8dd4-9ffbc66a9f35")
+                    Status = SnippetStatus.Chosen,
+                    SubmissionPeriodId = submission1
                 },new Snippet{
                     Id = new Guid("5d6932f8-5886-4723-8eb8-c243c40da684"),
                     Content = "He was always late for his lunch appointments.",
                     Author = "John",
                     NewParagraph = false,
-                    StoryId = new Guid("8e733419-c6a3-4b59-8d5a-8784c1b61724"),
+                    StoryId = storyId,
                     SubmissionDate = new DateTime(2015,10,11,6,0,0),
                     Score = 5,
-                    SubmissionPeriodId = new Guid("3f6945fe-83e4-478b-8dd4-9ffbc66a9f35")
+                    Status = SnippetStatus.Submitted,
+                    SubmissionPeriodId = submission1
                 },new Snippet{
                     Id = new Guid("1227e500-071c-48ef-b92d-690a99d0ec21"),
                     Content = "BLAH BLAH BLAH.",
                     Author = "John",
                     NewParagraph = true,
-                    StoryId = new Guid("8e733419-c6a3-4b59-8d5a-8784c1b61724"),
+                    StoryId = storyId,
                     SubmissionDate = new DateTime(2015,10,11,12,0,0),
                     Score = 0,
-                    SubmissionPeriodId = new Guid("3f6945fe-83e4-478b-8dd4-9ffbc66a9f35")
+                    Status = SnippetStatus.Submitted,
+                    SubmissionPeriodId = submission1
+                },
+                new Snippet{
+                    Id = Guid.NewGuid(),
+                    Content = "Once upon a time there was a little boy named Reese,",
+                    Author = "John",
+                    NewParagraph = false,
+                    StoryId = storyId,
+                    SubmissionDate = new DateTime(2015,10,11),
+                    Score = 10,
+                    Status = SnippetStatus.Submitted,
+                    SubmissionPeriodId = submission2
+                },new Snippet{
+                    Id = Guid.NewGuid(),
+                    Content = "He was always late for his lunch appointments.",
+                    Author = "John",
+                    NewParagraph = false,
+                    StoryId =storyId,
+                    SubmissionDate = new DateTime(2015,10,11,6,0,0),
+                    Score = 5,
+                    Status = SnippetStatus.Chosen,
+                    SubmissionPeriodId = submission2,
+                },new Snippet{
+                    Id = Guid.NewGuid(),
+                    Content = "BLAH BLAH BLAH.",
+                    Author = "John",
+                    NewParagraph = true,
+                    StoryId = storyId,
+                    SubmissionDate = new DateTime(2015,10,11,12,0,0),
+                    Score = 0,
+                    Status = SnippetStatus.Submitted,
+                    SubmissionPeriodId = submission3
                 }
-
             };
         }
 

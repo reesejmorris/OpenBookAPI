@@ -8,7 +8,6 @@ using Microsoft.AspNet.Authorization;
 
 namespace OpenBookAPI.Controllers
 {
-    [Authorize(ActiveAuthenticationSchemes = Microsoft.AspNet.Authentication.OpenIdConnect.OpenIdConnectAuthenticationDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class AccountController : Controller
     {

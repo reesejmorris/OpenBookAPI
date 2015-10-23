@@ -28,6 +28,13 @@ namespace OpenBookAPI.Logic.Interfaces
         IEnumerable<Snippet> GetSnippetsForStory(Guid storyId);
 
         /// <summary>
+        /// Get all the chosen snippets for the story
+        /// </summary>
+        /// <param name="storyId">Story Id</param>
+        /// <returns>an <see cref="IEnumerable{T}"/> of <see cref="Snippet"/></returns>
+        IEnumerable<Snippet> GetChosenSnippetsForStory(Guid storyId);
+
+        /// <summary>
         /// Attempts to create a <see cref="Snippet"/>
         /// </summary>
         /// <param name="snippet">Submitted <see cref="Snippet"/></param>
