@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,6 +27,7 @@ namespace OpenBookAPI.Models
         /// <summary>
         /// Status of the story
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public StoryStatus Status { get; set; }
     }
     public enum StoryStatus

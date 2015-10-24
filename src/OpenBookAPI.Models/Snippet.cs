@@ -1,4 +1,6 @@
 ﻿using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace OpenBookAPI.Models
 {
@@ -13,6 +15,7 @@ namespace OpenBookAPI.Models
         public string Author { get; set; }
         public int Score { get; set; }
         public int Flags { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
         public SnippetStatus Status { get; set; }
     }
 

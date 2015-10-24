@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,6 +27,7 @@ namespace OpenBookAPI.Models
         /// <summary>
         /// the status of the submissionperiod
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public SubmissionPeriodStatus Status { get; set; }
     }
 

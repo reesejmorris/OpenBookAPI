@@ -5,8 +5,6 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.AspNet.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authentication;
-using Microsoft.AspNet.Authentication.Notifications;
 using Microsoft.Framework.Logging;
 
 namespace OpenBookAPI
@@ -29,7 +27,7 @@ namespace OpenBookAPI
             OpenBookAPIcors.Origins.Add("*");
             OpenBookAPIcors.Methods.Add("*");
             OpenBookAPIcors.SupportsCredentials = true;
-            services.ConfigureCors(cors => cors.AddPolicy("OpenBookAPI", OpenBookAPIcors));
+            services.AddCors(cors => cors.AddPolicy("OpenBookAPI", OpenBookAPIcors));
 
             //Dependancy Injection
             Modules.Register(services);
@@ -55,6 +53,7 @@ namespace OpenBookAPI
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
         {
             app.UseStaticFiles();
+            app.UseIISPlatformHandler();
             //app.UseSwagger();
             //app.UseSwaggerUi();
 
