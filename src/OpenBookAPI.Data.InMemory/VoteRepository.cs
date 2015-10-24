@@ -88,21 +88,21 @@ namespace OpenBookAPI.Data.InMemory
             };
 
         }
-        public Vote GetById(Guid voteId)
+        public async Task<Vote> GetById(Guid voteId)
         {
             return _dataContext.FirstOrDefault(s => s.Id == voteId);
         }
 
-        public IEnumerable<Vote> GetAll()
+        public async Task<IEnumerable<Vote>> GetAll()
         {
             return _dataContext;
         }
-        public IEnumerable<Vote> GetByItemId(Guid itemId)
+        public async Task<IEnumerable<Vote>> GetByItemId(Guid itemId)
         {
             return _dataContext.Where(a => a.ItemId == itemId);
         }
 
-        public Vote CreateVote(Vote newVote)
+        public async Task<Vote> CreateVote(Vote newVote)
         {
             newVote.Id = Guid.NewGuid();
             _dataContext.Add(newVote);

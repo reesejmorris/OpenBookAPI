@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenBookAPI.Models;
+using System.Threading.Tasks;
 
 namespace OpenBookAPI.Data.Interfaces
 {
     public interface IVoteRepository
     {
-        IEnumerable<Vote> GetAll();
-        Vote GetById(Guid voteId);
-        IEnumerable<Vote> GetByItemId(Guid itemId);
-        Vote CreateVote(Vote newVote);
+        Task<IEnumerable<Vote>> GetAll();
+        Task<Vote> GetById(Guid voteId);
+        Task<IEnumerable<Vote>> GetByItemId(Guid itemId);
+        Task<Vote> CreateVote(Vote newVote);
     }
 }

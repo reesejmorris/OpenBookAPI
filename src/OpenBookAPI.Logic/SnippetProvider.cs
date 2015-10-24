@@ -16,41 +16,49 @@ namespace OpenBookAPI.Logic
         {
             _repository = repository;
         }
-        public IEnumerable<Snippet> GetSnippetsForStory(Guid storyId)
+        public async Task<IEnumerable<Snippet>> GetSnippetsForStory(Guid storyId)
         {
-            return _repository.GetByStory(storyId);
+            return await _repository.GetByStory(storyId);
         }
-        public IEnumerable<Snippet> GetChosenSnippetsForStory(Guid storyId)
+        public async Task<IEnumerable<Snippet>> GetChosenSnippetsForStory(Guid storyId)
         {
-            return _repository.GetByStory(storyId).Where(s=>s.Status == SnippetStatus.Chosen);
+            var snippets = await _repository.GetByStory(storyId);
+            return snippets.Where(s=>s.Status == SnippetStatus.Chosen);
         }
-        public IEnumerable<Snippet> GetSnippets()
+        public async Task<IEnumerable<Snippet>> GetSnippets()
         {
-            return _repository.GetAll();
+            return await _repository.GetAll();
         }
-        public Snippet GetSnippet(Guid id)
+        public async Task<Snippet> GetSnippet(Guid id)
         {
-            return _repository.GetById(id);
-        }
-
-        public Snippet SubmitSnippet(Snippet snippet)
-        {
-            return _repository.Create(snippet);
+            return await _repository.GetById(id);
         }
 
-        public Snippet UpdateSnippet(Snippet snippet)
+        public async Task<Snippet> SubmitSnippet(Snippet snippet)
         {
-            return _repository.Update(snippet);
+            return await _repository.Create(snippet);
         }
 
-        public bool DeleteSnippet(Guid id)
+        public async Task<Snippet> UpdateSnippet(Snippet snippet)
         {
-            return _repository.Delete(id);
+            return await _repository.Update(snippet);
         }
 
-        public IEnumerable<Snippet> GetSnippetsForSubmissionPeriod(Guid submissionPeriodId)
+        public async Task<bool> DeleteSnippet(Guid id)
         {
-            return _repository.GetBySubmissionPeriodId(submissionPeriodId);
+            return await _repository.Delete(id);
+        }
+
+        public async Task<IEnumerable<Snippet>> GetSnippetsForSubmissionPeriod(Guid submissionPeriodId)
+        {
+            return await _repository.GetBySubmissionPeriodId(submissionPeriodId);
+        }
+
+        public async Task<Snippet> FlagSnippet(Guid snippetId)
+        {
+            var snippet = await _repository.GetById(snippetId);
+            snippet.Flags += 1;
+            return await _repository.Update(snippet);
         }
     }
 }

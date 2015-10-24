@@ -5,6 +5,7 @@ using System;
 using OpenBookAPI.Models;
 using Microsoft.AspNet.Cors.Core;
 using Microsoft.AspNet.Authorization;
+using System.Threading.Tasks;
 
 namespace OpenBookAPI.Controllers
 {
@@ -30,9 +31,9 @@ namespace OpenBookAPI.Controllers
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Snippet"/>s</returns>
         // GET: api/Snippet
         [HttpGet]
-        public IEnumerable<Snippet> Get()
+        async public Task<IEnumerable<Snippet>> Get()
         {
-            return snippetProvider.GetSnippets();
+            return await snippetProvider.GetSnippets();// snippetProvider.GetSnippets();
         }
 
         /// <summary>
@@ -42,10 +43,11 @@ namespace OpenBookAPI.Controllers
         /// <returns>The requested <see cref="Snippet"/></returns>
         // GET api/snippet/{id:Guid}
         [HttpGet("{id:Guid}")]
-        public Snippet Get(Guid id)
+        async public Task<Snippet> Get(Guid id)
         {
-            return snippetProvider.GetSnippet(id);
+            return await snippetProvider.GetSnippet(id);
         }
+
         /// <summary>
         /// Gets all the <see cref="Snippet"/>s for a story
         /// </summary>
@@ -53,9 +55,14 @@ namespace OpenBookAPI.Controllers
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Snippet"/>s</returns>
         // GET api/story/{story_id:Guid}/snippet
         [HttpGet("~/api/story/{story_id:Guid}/ChosenSnippets")]
-        public IEnumerable<Snippet> GetChosenByStoryId(Guid story_id)
+        async public Task<IEnumerable<Snippet>> GetChosenByStoryId(Guid storyId)
         {
-            return snippetProvider.GetChosenSnippetsForStory(story_id);
+            return await snippetProvider.GetChosenSnippetsForStory(storyId);
+        }
+
+        async public Task<Snippet> FlagSnippetAsInappropriate(Guid snippetId)
+        {
+            return await snippetProvider.FlagSnippet(snippetId);
         }
 
         /// <summary>
@@ -65,9 +72,9 @@ namespace OpenBookAPI.Controllers
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Snippet"/>s</returns>
         // GET api/story/{story_id:Guid}/snippet
         [HttpGet("~/api/submissionperiod/{submissionPeriodId:Guid}/snippet")]
-        public IEnumerable<Snippet> GetBySubmissionPeriodId(Guid submissionPeriodId)
+        async public Task<IEnumerable<Snippet>> GetBySubmissionPeriodId(Guid submissionPeriodId)
         {
-            return snippetProvider.GetSnippetsForSubmissionPeriod(submissionPeriodId);
+            return await snippetProvider.GetSnippetsForSubmissionPeriod(submissionPeriodId);
         }
 
         /// <summary>
@@ -77,9 +84,9 @@ namespace OpenBookAPI.Controllers
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Snippet"/>s</returns>
         // GET api/story/{story_id:Guid}/snippet
         [HttpGet("~/api/story/{storyId:Guid}/snippet")]
-        public IEnumerable<Snippet> GetByStoryId(Guid storyId)
+        async public Task<IEnumerable<Snippet>> GetByStoryId(Guid storyId)
         {
-            return snippetProvider.GetSnippetsForStory(storyId);
+            return await snippetProvider.GetSnippetsForStory(storyId);
         }
 
         /// <summary>
@@ -89,9 +96,9 @@ namespace OpenBookAPI.Controllers
         /// <returns>The created <see cref="Snippet"/></returns>
         // POST api/snippet
         [HttpPost]
-        public Snippet Post([FromBody]Snippet snippet)
+        async public Task<Snippet> Post([FromBody]Snippet snippet)
         {
-            return snippetProvider.SubmitSnippet(snippet);
+            return await snippetProvider.SubmitSnippet(snippet);
         }
 
         /// <summary>
@@ -102,9 +109,9 @@ namespace OpenBookAPI.Controllers
         /// <returns>The updated <see cref="Snippet"/></returns>
         // PUT api/Snippet/{id:Guid}
         [HttpPut("{id:Guid}")]
-        public Snippet Put(Guid id, [FromBody]Snippet snippet)
+        async public Task<Snippet> Put(Guid id, [FromBody]Snippet snippet)
         {
-            return snippetProvider.UpdateSnippet(snippet);
+            return await snippetProvider.UpdateSnippet(snippet);
         }
 
         /// <summary>
@@ -114,9 +121,9 @@ namespace OpenBookAPI.Controllers
         /// <returns>Success(<see cref="bool"/>)</returns>
         // DELETE api/Snippet/{id:Guid}
         [HttpDelete("{id:Guid}")]
-        public bool Delete(Guid id)
+        async public Task<bool> Delete(Guid id)
         {
-            return snippetProvider.DeleteSnippet(id);
+            return await snippetProvider.DeleteSnippet(id);
         }
         /// <summary>
         /// Register a new downvote on a snippet (Set ContentLength header to 0 when posting to this endpoint)
@@ -124,9 +131,9 @@ namespace OpenBookAPI.Controllers
         /// <param name="id">Snippet Id</param>
         /// <returns><see cref="int"/> Score</returns>
         [HttpPost("{id:Guid}/UpVote")]
-        public int UpVote(Guid id)
+        async public Task<int> UpVote(Guid id)
         {
-            return voteProvider.UpVote(id);
+            return await voteProvider.UpVote(id);
         }
         /// <summary>
         /// Register a new upvote on a snippet (Set ContentLength header to 0 when posting to this endpoint)
@@ -134,9 +141,21 @@ namespace OpenBookAPI.Controllers
         /// <param name="id">Snippet Id</param>
         /// <returns><see cref="int"/> Score</returns>
         [HttpPost("{id:Guid}/DownVote")]
-        public int DownVote(Guid id)
+        async public Task<int> DownVote(Guid id)
         {
-            return voteProvider.DownVote(id);
+            return await voteProvider.DownVote(id);
+        }
+
+        /// <summary>
+        /// flag a snippet (Set ContentLength header to 0 when posting to this endpoint)
+        /// </summary>
+        /// <param name="id">Snippet Id</param>
+        /// <returns><see cref="int"/> Flags</returns>
+        [HttpPost("{id:Guid}/Flag")]
+        async public Task<int> Flag(Guid id)
+        {
+            var snippet = await snippetProvider.FlagSnippet(id);
+            return snippet.Flags;
         }
     }
 }

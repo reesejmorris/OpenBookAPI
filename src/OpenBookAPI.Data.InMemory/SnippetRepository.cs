@@ -87,35 +87,35 @@ namespace OpenBookAPI.Data.InMemory
             };
         }
 
-        public Snippet GetById(Guid snippetId)
+        public async Task<Snippet> GetById(Guid snippetId)
         {
             return _dataContext.FirstOrDefault(s => s.Id == snippetId);
         }
 
-        public IEnumerable<Snippet> GetAll()
+        public async Task<IEnumerable<Snippet>> GetAll()
         {
             return _dataContext;
         }
-        public IEnumerable<Snippet> GetByStory(Guid storyId)
+        public async Task<IEnumerable<Snippet>> GetByStory(Guid storyId)
         {
             return _dataContext.Where(a=>a.StoryId == storyId);
         }
 
-        public IEnumerable<Snippet> GetBySubmissionPeriodId(Guid submissionPeriodId)
+        public async Task<IEnumerable<Snippet>> GetBySubmissionPeriodId(Guid submissionPeriodId)
         {
             return _dataContext.Where(sp => sp.SubmissionPeriodId == submissionPeriodId);
         }
 
-        public Snippet Create(Snippet snippet)
+        public async Task<Snippet> Create(Snippet snippet)
         {
             snippet.Id = Guid.NewGuid();
             _dataContext.Add(snippet);
             return snippet;
         }
 
-        public Snippet Update(Snippet snippet)
+        public async Task<Snippet> Update(Snippet snippet)
         {
-            var old = GetById(snippet.Id);
+            var old = await GetById(snippet.Id);
             if (old == null)
                 return null;
             _dataContext.Remove(old);
@@ -123,9 +123,9 @@ namespace OpenBookAPI.Data.InMemory
             return snippet;
         }
 
-        public bool Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
-            var old = GetById(id);
+            var old = await GetById(id);
             if (old == null)
                 return false;
             return _dataContext.Remove(old);

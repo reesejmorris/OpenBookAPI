@@ -23,18 +23,18 @@ namespace OpenBookAPI.Logic
             _voteRepository = voteRepo;
             _snippetRepository = snippetRepo;
         }
-        public int DownVote(Guid ItemId)
+        public async Task<int> DownVote(Guid ItemId)
         {
-            return RegisterVote(ItemId, -voteValue);
+            return await RegisterVote(ItemId, -voteValue);
         }
-        public int UpVote(Guid ItemId)
+        public async Task<int> UpVote(Guid ItemId)
         {
-            return RegisterVote(ItemId, voteValue);
+            return await RegisterVote(ItemId, voteValue);
         }
 
-        public int RegisterVote(Guid ItemId, int value)
+        public async Task<int> RegisterVote(Guid ItemId, int value)
         {
-            return RegisterVote(new Vote
+            return await RegisterVote(new Vote
             {
                 ItemId = ItemId,
                 Value = value,
@@ -47,26 +47,27 @@ namespace OpenBookAPI.Logic
         /// </summary>
         /// <param name="newVote"></param>
         /// <returns></returns>
-        public int RegisterVote(Vote newVote)
+        public async Task<int> RegisterVote(Vote newVote)
         {
-            var snippet = _snippetRepository.GetById(newVote.ItemId);
+            var snippet = await _snippetRepository.GetById(newVote.ItemId);
             if (snippet == null)
                 return 0;  //No Snippet return zero
-            
-            if (_voteRepository.GetByItemId(newVote.ItemId).Count(v => v.UserId == newVote.UserId) > 0)
+
+            var existingVotes = await _voteRepository.GetByItemId(newVote.ItemId);
+            if (existingVotes.Count(v => v.UserId == newVote.UserId) > 0)
                 return snippet.Score;  //Already voted return current score
 
             //create the vote
-            var created = _voteRepository.CreateVote(newVote).Id != Guid.Empty; 
-            if (created)
+            var created = await _voteRepository.CreateVote(newVote);
+            if (created.Id != Guid.Empty)
             {
                 //update the score on the snippet model
-                var voteCount = _voteRepository.GetByItemId(snippet.Id).Sum(v => v.Value);
+                var voteCount = _voteRepository.GetByItemId(snippet.Id).Result.Sum(v => v.Value);
                 if (voteCount != snippet.Score)
                 {
                     snippet.Score = voteCount;
                 }
-                snippet = _snippetRepository.Update(snippet);
+                snippet = await _snippetRepository.Update(snippet);
             }
             return snippet.Score;
         }

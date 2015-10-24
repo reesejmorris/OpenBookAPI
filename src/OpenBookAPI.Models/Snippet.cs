@@ -12,8 +12,8 @@ namespace OpenBookAPI.Models
         public string Content { get; set; }
         public string Author { get; set; }
         public int Score { get; set; }
+        public int Flags { get; set; }
         public SnippetStatus Status { get; set; }
-
     }
 
     public enum SnippetStatus

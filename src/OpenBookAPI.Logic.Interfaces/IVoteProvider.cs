@@ -1,13 +1,14 @@
 ﻿using System;
 using OpenBookAPI.Models;
+using System.Threading.Tasks;
 
 namespace OpenBookAPI.Logic.Interfaces
 {
     public interface IVoteProvider
     {
-        int DownVote(Guid ItemId);
-        int RegisterVote(Vote newVote);
-        int RegisterVote(Guid ItemId, int value);
-        int UpVote(Guid ItemId);
+        Task<int> DownVote(Guid ItemId);
+        Task<int> RegisterVote(Vote newVote);
+        Task<int> RegisterVote(Guid ItemId, int value);
+        Task<int> UpVote(Guid ItemId);
     }
 }
