@@ -6,6 +6,7 @@ using Microsoft.Framework.DependencyInjection;
 using Microsoft.AspNet.Http;
 using System.Threading.Tasks;
 using Microsoft.Framework.Logging;
+using Swashbuckle.Swagger;
 
 namespace OpenBookAPI
 {
@@ -33,7 +34,22 @@ namespace OpenBookAPI
             Modules.Register(services);
 
             //Swagger
-            //services.AddSwagger();
+            services.AddSwagger();
+            services.ConfigureSwaggerDocument(options =>
+            {
+                options.SingleApiVersion(new Info
+                {
+                    Version = "v1",
+                    Title = "OpenBook API",
+                    Description = "The API Backend for the OpenBookApp",
+                    TermsOfService = "No Potatos.",
+                });
+                
+            });
+            services.ConfigureSwaggerSchema(options =>
+            {
+                options.DescribeAllEnumsAsStrings = true;
+            });
 
             //Configure Auth policies
             services.AddAuthorization(options =>
@@ -54,9 +70,8 @@ namespace OpenBookAPI
         {
             app.UseStaticFiles();
             app.UseIISPlatformHandler();
-            //app.UseSwagger();
-            //app.UseSwaggerUi();
-
+            app.UseSwagger();
+            app.UseSwaggerUi();
             //app.UseOpenIdConnectAuthentication(options =>
             //{
             //    options.Authority = "https://accounts.google.com/";

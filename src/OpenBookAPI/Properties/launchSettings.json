@@ -3,7 +3,13 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/snippet",
+      "launchUrl": "swagger/ui/index.html",
+      "environmentVariables": {
+        "ASPNET_ENV": "Development"
+      }
+    },
+    "web": {
+      "commandName": "web",
       "environmentVariables": {
         "ASPNET_ENV": "Development"
       }

@@ -51,10 +51,10 @@ namespace OpenBookAPI.Controllers
         /// <summary>
         /// Gets all the <see cref="Snippet"/>s for a story
         /// </summary>
-        /// <param name="story_id">The <see cref="Guid"/> of the story</param>
+        /// <param name="storyId">The <see cref="Guid"/> of the story</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Snippet"/>s</returns>
         // GET api/story/{story_id:Guid}/snippet
-        [HttpGet("~/api/story/{story_id:Guid}/ChosenSnippets")]
+        [HttpGet("~/api/story/{storyId:Guid}/ChosenSnippets")]
         async public Task<IEnumerable<Snippet>> GetChosenByStoryId(Guid storyId)
         {
             return await snippetProvider.GetChosenSnippetsForStory(storyId);
@@ -68,7 +68,7 @@ namespace OpenBookAPI.Controllers
         /// <summary>
         /// Gets all the <see cref="Snippet"/>s for a submission period
         /// </summary>
-        /// <param name="story_id">The <see cref="Guid"/> of the story</param>
+        /// <param name="submissionPeriodId">The <see cref="Guid"/> of the submission period</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Snippet"/>s</returns>
         // GET api/story/{story_id:Guid}/snippet
         [HttpGet("~/api/submissionperiod/{submissionPeriodId:Guid}/snippet")]
@@ -80,7 +80,7 @@ namespace OpenBookAPI.Controllers
         /// <summary>
         /// Gets all the <see cref="Snippet"/>s for a story
         /// </summary>
-        /// <param name="story_id">The <see cref="Guid"/> of the story</param>
+        /// <param name="storyId">The <see cref="Guid"/> of the story</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Snippet"/>s</returns>
         // GET api/story/{story_id:Guid}/snippet
         [HttpGet("~/api/story/{storyId:Guid}/snippet")]
