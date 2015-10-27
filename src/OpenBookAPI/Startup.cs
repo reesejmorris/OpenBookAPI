@@ -7,13 +7,23 @@ using Microsoft.AspNet.Http;
 using System.Threading.Tasks;
 using Microsoft.Framework.Logging;
 using Swashbuckle.Swagger;
+using Microsoft.Framework.Configuration;
+using Microsoft.AspNet.Authentication.JwtBearer;
+using Microsoft.Dnx.Runtime;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace OpenBookAPI
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public IConfiguration Configuration { get; set; }
+        public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
+            var builder = new ConfigurationBuilder()
+                                .SetBasePath(appEnv.ApplicationBasePath)
+                                .AddJsonFile("config.json")
+                                .AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
 
         // This method gets called by a runtime.
@@ -50,34 +60,23 @@ namespace OpenBookAPI
             {
                 options.DescribeAllEnumsAsStrings = true;
             });
-
-            //Configure Auth policies
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("registeredOnly", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                });
-                options.AddPolicy("adminOnly", policy =>
-                {
-                    policy.RequireClaim("role", "admin");
-                });
-            });
         }
 
         // Configure is called after ConfigureServices is called.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseStaticFiles();
             app.UseIISPlatformHandler();
             app.UseSwagger();
             app.UseSwaggerUi();
-            //app.UseOpenIdConnectAuthentication(options =>
-            //{
-            //    options.Authority = "https://accounts.google.com/";
-            //    options.ClientId = "336092105680-uattl87g384j7n5ibfid4v10c7pcerkp.apps.googleusercontent.com";
-            //    options.ClientSecret = "PaZLmNwOCY_N-HUZKIEStabp";
-            //});
+
+            app.UseJwtBearerAuthentication(options=>
+            {
+                options.Audience = Configuration["Auth0:ClientId"];
+                options.Authority = "https://" + Configuration["Auth0:Domain"];
+                options.AutomaticAuthentication = true;
+                options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler());
+            });
 
             //should go at the end
             app.UseMvc();
