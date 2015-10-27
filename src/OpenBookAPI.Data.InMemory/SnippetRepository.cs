@@ -30,6 +30,7 @@ namespace OpenBookAPI.Data.InMemory
                     StoryId = storyId,
                     SubmissionDate = new DateTime(2015,10,11),
                     Score = 10,
+                    Flags = 1,
                     Status = SnippetStatus.Chosen,
                     SubmissionPeriodId = submission1
                 },new Snippet{
