@@ -20,6 +20,7 @@ namespace OpenBookAPI
             services.AddTransient<IStoryProvider, StoryProvider>();
             services.AddTransient<ISubmissionPeriodProvider, SubmissionPeriodProvider>();
             services.AddTransient<IVoteProvider, VoteProvider>();
+            services.AddTransient<IFlagProvider, FlagProvider>();
 
             /**********************  Data   ***********************/
             //In memory Data
@@ -27,6 +28,7 @@ namespace OpenBookAPI
             services.AddInstance(typeof(IStoryRepository), new OpenBookAPI.Data.InMemory.StoryRepository());
             services.AddInstance(typeof(ISubmissionPeriodRepository), new OpenBookAPI.Data.InMemory.SubmissionPeriodRepository());
             services.AddInstance(typeof(IVoteRepository), new OpenBookAPI.Data.InMemory.VoteRepository());
+            services.AddInstance(typeof(IFlagRepository), new OpenBookAPI.Data.InMemory.FlagRepository());
         }
     }
 }

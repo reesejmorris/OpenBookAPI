@@ -15,14 +15,16 @@ namespace OpenBookAPI.Controllers
     {
         private ISnippetProvider snippetProvider { get; set; }
         private IVoteProvider voteProvider { get; set; }
+        private IFlagProvider flagProvider { get; set; }
         /// <summary>
         /// Snippet Controller constructor
         /// </summary>
         /// <param name="provider">The injected <see cref="ISnippetProvider"/></param>
-        public SnippetController(ISnippetProvider snippetprovider, IVoteProvider voteprovider)
+        public SnippetController(ISnippetProvider snippetprovider, IVoteProvider voteprovider, IFlagProvider flagprovider)
         {
             snippetProvider = snippetprovider;
             voteProvider = voteprovider;
+            flagProvider = flagprovider;
         }
 
         /// <summary>
@@ -60,9 +62,27 @@ namespace OpenBookAPI.Controllers
             return await snippetProvider.GetChosenSnippetsForStory(storyId);
         }
 
-        async public Task<Snippet> FlagSnippetAsInappropriate(Guid snippetId)
+
+        /// <summary>
+        /// Flag a snippet as inapropriate
+        /// </summary>
+        /// <param name="snippetId"></param>
+        /// <returns>An <see cref="int"/> signifying the number of flags a snippet has</returns>
+        [HttpPost("{snippetId:Guid}/Flag")]
+        async public Task<int> FlagSnippetAsInappropriate(Guid snippetId)
         {
-            return await snippetProvider.FlagSnippet(snippetId);
+            return await flagProvider.FlagSnippet(snippetId);
+        }
+
+        /// <summary>
+        /// UnFlag a snippet
+        /// </summary>
+        /// <param name="snippetId"></param>
+        /// <returns>An <see cref="int"/> signifying the number of flags a snippet has</returns>
+        [HttpPost("{snippetId:Guid}/UnFlag")]
+        async public Task<int> UnFlagSnippet(Guid snippetId)
+        {
+            return await flagProvider.UnFlagSnippet(snippetId);
         }
 
         /// <summary>
@@ -144,18 +164,6 @@ namespace OpenBookAPI.Controllers
         async public Task<int> DownVote(Guid id)
         {
             return await voteProvider.DownVote(id);
-        }
-
-        /// <summary>
-        /// flag a snippet (Set ContentLength header to 0 when posting to this endpoint)
-        /// </summary>
-        /// <param name="id">Snippet Id</param>
-        /// <returns><see cref="int"/> Flags</returns>
-        [HttpPost("{id:Guid}/Flag")]
-        async public Task<int> Flag(Guid id)
-        {
-            var snippet = await snippetProvider.FlagSnippet(id);
-            return snippet.Flags;
         }
     }
 }
