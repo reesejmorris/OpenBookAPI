@@ -72,6 +72,7 @@ namespace OpenBookAPI
 
             app.UseJwtBearerAuthentication(options=>
             {
+                options.TokenValidationParameters.NameClaimType = "name";
                 options.Audience = Configuration["Auth0:ClientId"];
                 options.Authority = "https://" + Configuration["Auth0:Domain"];
                 options.AutomaticAuthentication = true;
