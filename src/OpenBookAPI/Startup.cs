@@ -6,7 +6,7 @@ using Microsoft.Framework.DependencyInjection;
 using Microsoft.AspNet.Http;
 using System.Threading.Tasks;
 using Microsoft.Framework.Logging;
-using Swashbuckle.Swagger;
+//using Swashbuckle.Swagger;
 using Microsoft.Framework.Configuration;
 using Microsoft.AspNet.Authentication.JwtBearer;
 using Microsoft.Dnx.Runtime;
@@ -44,22 +44,22 @@ namespace OpenBookAPI
             Modules.Register(services);
 
             //Swagger
-            services.AddSwagger();
-            services.ConfigureSwaggerDocument(options =>
-            {
-                options.SingleApiVersion(new Info
-                {
-                    Version = "v1",
-                    Title = "OpenBook API",
-                    Description = "The API Backend for the OpenBookApp",
-                    TermsOfService = "No Potatos.",
-                });
-                
-            });
-            services.ConfigureSwaggerSchema(options =>
-            {
-                options.DescribeAllEnumsAsStrings = true;
-            });
+            //  services.AddSwagger();
+            //  services.ConfigureSwaggerDocument(options =>
+            //  {
+            //      options.SingleApiVersion(new Info
+            //      {
+            //          Version = "v1",
+            //          Title = "OpenBook API",
+            //          Description = "The API Backend for the OpenBookApp",
+            //          TermsOfService = "No Potatos.",
+            //      });
+            //      
+            //  });
+            //  services.ConfigureSwaggerSchema(options =>
+            //  {
+            //      options.DescribeAllEnumsAsStrings = true;
+            //  });
         }
 
         // Configure is called after ConfigureServices is called.
@@ -67,8 +67,8 @@ namespace OpenBookAPI
         {
             app.UseStaticFiles();
             app.UseIISPlatformHandler();
-            app.UseSwagger();
-            app.UseSwaggerUi();
+            //  app.UseSwagger();
+            //  app.UseSwaggerUi();
 
             app.UseJwtBearerAuthentication(options=>
             {
