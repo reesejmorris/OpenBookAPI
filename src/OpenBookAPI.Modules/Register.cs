@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Framework.DependencyInjection;
-using OpenBookAPI.Data.Interfaces;
-using OpenBookAPI.Logic;
-using OpenBookAPI.Logic.Interfaces;
+﻿using Microsoft.Framework.DependencyInjection;
 
 namespace OpenBookAPI
 {
@@ -16,19 +9,19 @@ namespace OpenBookAPI
         public static void Register(this IServiceCollection services)
         {
             /**********************  Logic  ***********************/
-            services.AddTransient<ISnippetProvider, SnippetProvider>();
-            services.AddTransient<IStoryProvider, StoryProvider>();
-            services.AddTransient<ISubmissionPeriodProvider, SubmissionPeriodProvider>();
-            services.AddTransient<IVoteProvider, VoteProvider>();
-            services.AddTransient<IFlagProvider, FlagProvider>();
+            services.AddTransient<OpenBookAPI.Logic.Interfaces.ISnippetProvider, OpenBookAPI.Logic.SnippetProvider>();
+            services.AddTransient<OpenBookAPI.Logic.Interfaces.IStoryProvider, OpenBookAPI.Logic.StoryProvider>();
+            services.AddTransient<OpenBookAPI.Logic.Interfaces.ISubmissionPeriodProvider, OpenBookAPI.Logic.SubmissionPeriodProvider>();
+            services.AddTransient<OpenBookAPI.Logic.Interfaces.IVoteProvider, OpenBookAPI.Logic.VoteProvider>();
+            services.AddTransient<OpenBookAPI.Logic.Interfaces.IFlagProvider, OpenBookAPI.Logic.FlagProvider>();
 
             /**********************  Data   ***********************/
             //In memory Data
-            services.AddInstance(typeof(ISnippetRepository), new OpenBookAPI.Data.InMemory.SnippetRepository());
-            services.AddInstance(typeof(IStoryRepository), new OpenBookAPI.Data.InMemory.StoryRepository());
-            services.AddInstance(typeof(ISubmissionPeriodRepository), new OpenBookAPI.Data.InMemory.SubmissionPeriodRepository());
-            services.AddInstance(typeof(IVoteRepository), new OpenBookAPI.Data.InMemory.VoteRepository());
-            services.AddInstance(typeof(IFlagRepository), new OpenBookAPI.Data.InMemory.FlagRepository());
+            services.AddInstance(typeof(OpenBookAPI.Data.Interfaces.ISnippetRepository), new OpenBookAPI.Data.InMemory.SnippetRepository());
+            services.AddInstance(typeof(OpenBookAPI.Data.Interfaces.IStoryRepository), new OpenBookAPI.Data.InMemory.StoryRepository());
+            services.AddInstance(typeof(OpenBookAPI.Data.Interfaces.ISubmissionPeriodRepository), new OpenBookAPI.Data.InMemory.SubmissionPeriodRepository());
+            services.AddInstance(typeof(OpenBookAPI.Data.Interfaces.IVoteRepository), new OpenBookAPI.Data.InMemory.VoteRepository());
+            services.AddInstance(typeof(OpenBookAPI.Data.Interfaces.IFlagRepository), new OpenBookAPI.Data.InMemory.FlagRepository());
         }
     }
 }
