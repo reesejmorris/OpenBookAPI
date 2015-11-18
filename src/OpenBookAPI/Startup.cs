@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Framework.Logging;
 using Swashbuckle.Swagger;
 using Microsoft.Framework.Configuration;
-using Microsoft.AspNet.Authentication.JwtBearer;
 using Microsoft.Dnx.Runtime;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace OpenBookAPI
 {
@@ -70,14 +68,14 @@ namespace OpenBookAPI
             app.UseSwagger();
             app.UseSwaggerUi();
 
-            app.UseJwtBearerAuthentication(options=>
-            {
-                options.TokenValidationParameters.NameClaimType = "name";
-                options.Audience = Configuration["Auth0:ClientId"];
-                options.Authority = "https://" + Configuration["Auth0:Domain"];
-                options.AutomaticAuthentication = true;
-                options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler());
-            });
+            //app.UseJwtBearerAuthentication(options=>
+            //{
+            //    options.TokenValidationParameters.NameClaimType = "name";
+            //    options.Audience = Configuration["Auth0:ClientId"];
+            //    options.Authority = "https://" + Configuration["Auth0:Domain"];
+            //    options.AutomaticAuthentication = true;
+            //    options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler());
+            //});
 
             //should go at the end
             app.UseMvc();
