@@ -8,7 +8,6 @@
   "frameworks": {
     "dnx451": {
       "dependencies": {
-        "Microsoft.Framework.DependencyInjection": "1.0.0-beta8"
       }
     },
     "dnxcore50": {
@@ -17,8 +16,7 @@
         "System.Collections": "4.0.11-beta-23225",
         "System.Linq": "4.0.1-beta-23225",
         "System.Runtime": "4.0.21-beta-23225",
-        "System.Threading": "4.0.11-beta-23225",
-        "Microsoft.Framework.DependencyInjection": "1.0.0-beta8"
+        "System.Threading": "4.0.11-beta-23225"
       }
     }
   },
@@ -27,6 +25,7 @@
     "OpenBookAPI.Logic.Interfaces": "1.0.0-*",
     "OpenBookAPI.Data.Interfaces": "1.0.0-*",
     "OpenBookAPI.Logic": "1.0.0-*",
-    "OpenBookAPI.Data.InMemory": "1.0.0-*"
+    "OpenBookAPI.Data.InMemory": "1.0.0-*",
+    "Microsoft.Framework.DependencyInjection": "1.0.0-beta8"
   }
 }

@@ -11,7 +11,7 @@ namespace OpenBookAPI
             /**********************  Logic  ***********************/
             services.AddScoped<OpenBookAPI.Logic.Interfaces.ISnippetProvider, OpenBookAPI.Logic.SnippetProvider>();
             services.AddScoped<OpenBookAPI.Logic.Interfaces.IStoryProvider, OpenBookAPI.Logic.StoryProvider>();
-            services.AddScoped<OpenBookAPI.Logic.Interfaces.ISubmissionPeriodProvider, OpenBookAPI.Logic.SubmissionPeriodProvider>();
+            //services.AddScoped<OpenBookAPI.Logic.Interfaces.ISubmissionPeriodProvider, OpenBookAPI.Logic.SubmissionPeriodProvider>();
             services.AddScoped<OpenBookAPI.Logic.Interfaces.IVoteProvider, OpenBookAPI.Logic.VoteProvider>();
             services.AddScoped<OpenBookAPI.Logic.Interfaces.IFlagProvider, OpenBookAPI.Logic.FlagProvider>();
 
