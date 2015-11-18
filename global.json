@@ -1,8 +1,7 @@
 {
-  "projects": [ "src", "test", "../Ahoy/src" ],
+  "projects": [ "src" ],
     "sdk": {
         "version": "1.0.0-beta8",
-        "runtime": "clr",
-        "architecture": "x64"
+        "runtime": "clr"
     }
 }
