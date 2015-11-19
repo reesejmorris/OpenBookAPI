@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-//using Swashbuckle.Swagger;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.AspNet.Cors.Infrastructure;
+using Swashbuckle.Swagger;
 
 namespace OpenBookAPI
 {
@@ -38,22 +38,22 @@ namespace OpenBookAPI
             Modules.Register(services);
 
             //Swagger
-            //services.AddSwagger();
-            //services.ConfigureSwaggerDocument(options =>
-            //{
-            //    options.SingleApiVersion(new Info
-            //    {
-            //        Version = "v1",
-            //        Title = "OpenBook API",
-            //        Description = "The API Backend for the OpenBookApp",
-            //        TermsOfService = "No Potatos.",
-            //    });
-            //    
-            //});
-            //services.ConfigureSwaggerSchema(options =>
-            //{
-            //    options.DescribeAllEnumsAsStrings = true;
-            //});
+            services.AddSwagger();
+            services.ConfigureSwaggerDocument(options =>
+            {
+                options.SingleApiVersion(new Info
+                {
+                    Version = "v1",
+                    Title = "OpenBook API",
+                    Description = "The API Backend for the OpenBookApp",
+                    TermsOfService = "No Potatos.",
+                });
+                
+            });
+            services.ConfigureSwaggerSchema(options =>
+            {
+                options.DescribeAllEnumsAsStrings = true;
+            });
         }
 
         // Configure is called after ConfigureServices is called.
@@ -61,8 +61,8 @@ namespace OpenBookAPI
         {
             app.UseStaticFiles();
             //app.UseIISPlatformHandler();
-            //app.UseSwagger();
-            //app.UseSwaggerUi();
+            app.UseSwagger();
+            app.UseSwaggerUi();
 
             //app.UseJwtBearerAuthentication(options=>
             //{
