@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNet.Builder;
+﻿using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.AspNet.Http;
-using System.Threading.Tasks;
-using Microsoft.Framework.Logging;
-using Swashbuckle.Swagger;
-using Microsoft.Framework.Configuration;
-using Microsoft.Dnx.Runtime;
+using Microsoft.Extensions.DependencyInjection;
+//using Swashbuckle.Swagger;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.AspNet.Cors.Infrastructure;
 
 namespace OpenBookAPI
 {
@@ -31,33 +27,33 @@ namespace OpenBookAPI
             services.AddMvc();
 
             //CORS -- temporary currently allow anyone to connect
-            var OpenBookAPIcors = new Microsoft.AspNet.Cors.Core.CorsPolicy();
+            var OpenBookAPIcors = new CorsPolicy();
             OpenBookAPIcors.Headers.Add("*");
             OpenBookAPIcors.Origins.Add("*");
             OpenBookAPIcors.Methods.Add("*");
             OpenBookAPIcors.SupportsCredentials = true;
             services.AddCors(cors => cors.AddPolicy("OpenBookAPI", OpenBookAPIcors));
-
+            
             //Dependancy Injection
             Modules.Register(services);
 
             //Swagger
-            services.AddSwagger();
-            services.ConfigureSwaggerDocument(options =>
-            {
-                options.SingleApiVersion(new Info
-                {
-                    Version = "v1",
-                    Title = "OpenBook API",
-                    Description = "The API Backend for the OpenBookApp",
-                    TermsOfService = "No Potatos.",
-                });
-                
-            });
-            services.ConfigureSwaggerSchema(options =>
-            {
-                options.DescribeAllEnumsAsStrings = true;
-            });
+            //services.AddSwagger();
+            //services.ConfigureSwaggerDocument(options =>
+            //{
+            //    options.SingleApiVersion(new Info
+            //    {
+            //        Version = "v1",
+            //        Title = "OpenBook API",
+            //        Description = "The API Backend for the OpenBookApp",
+            //        TermsOfService = "No Potatos.",
+            //    });
+            //    
+            //});
+            //services.ConfigureSwaggerSchema(options =>
+            //{
+            //    options.DescribeAllEnumsAsStrings = true;
+            //});
         }
 
         // Configure is called after ConfigureServices is called.
@@ -65,8 +61,8 @@ namespace OpenBookAPI
         {
             app.UseStaticFiles();
             //app.UseIISPlatformHandler();
-            app.UseSwagger();
-            app.UseSwaggerUi();
+            //app.UseSwagger();
+            //app.UseSwaggerUi();
 
             //app.UseJwtBearerAuthentication(options=>
             //{

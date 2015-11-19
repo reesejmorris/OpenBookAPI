@@ -3,7 +3,7 @@ using Microsoft.AspNet.Mvc;
 using OpenBookAPI.Logic.Interfaces;
 using System;
 using OpenBookAPI.Models;
-using Microsoft.AspNet.Cors.Core;
+using Microsoft.AspNet.Cors;
 using Microsoft.AspNet.Authorization;
 using System.Threading.Tasks;
 

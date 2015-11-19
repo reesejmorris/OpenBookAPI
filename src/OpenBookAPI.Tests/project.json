@@ -12,20 +12,11 @@
     "OpenBookAPI.Logic.Interfaces": "1.0.0-*",
     "OpenBookAPI.Models": "1.0.0-*",
     "xunit": "2.1.0",
-    "xunit.runner.dnx": "2.1.0-beta6-build191"
+    "xunit.runner.dnx": "2.1.0-rc1-build204"
   },
   "frameworks": {
     "dnx451": {
       "dependencies": {
-      }
-    },
-    "dnxcore50": {
-      "dependencies": {
-        "Microsoft.CSharp": "4.0.1-beta-23409",
-        "System.Collections": "4.0.11-beta-23225",
-        "System.Linq": "4.0.1-beta-23225",
-        "System.Runtime": "4.0.21-beta-23225",
-        "System.Threading": "4.0.11-beta-23225"
       }
     }
   },
