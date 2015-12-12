@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.AspNet.Cors.Infrastructure;
+using Microsoft.AspNet.Authentication.JwtBearer;
 using Swashbuckle.Swagger;
 
 namespace OpenBookAPI
@@ -64,14 +65,14 @@ namespace OpenBookAPI
             app.UseSwagger();
             app.UseSwaggerUi();
 
-            //app.UseJwtBearerAuthentication(options=>
-            //{
-            //    options.TokenValidationParameters.NameClaimType = "name";
-            //    options.Audience = Configuration["Auth0:ClientId"];
-            //    options.Authority = "https://" + Configuration["Auth0:Domain"];
-            //    options.AutomaticAuthentication = true;
-            //    options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler());
-            //});
+            app.UseJwtBearerAuthentication(options=>
+            {
+                options.TokenValidationParameters.NameClaimType = "name";
+                options.Audience = Configuration["Auth0:ClientId"];
+                options.Authority = "https://" + Configuration["Auth0:Domain"];
+                //options.AutomaticAuthentication = true;
+                //options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler());
+            });
 
             //should go at the end
             app.UseMvc();
