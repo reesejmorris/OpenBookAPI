@@ -116,6 +116,7 @@ namespace OpenBookAPI.Controllers
         /// <returns>The created <see cref="Snippet"/></returns>
         // POST api/snippet
         [HttpPost]
+        [Authorize(ActiveAuthenticationSchemes = "Bearer")]
         async public Task<Snippet> Post([FromBody]Snippet snippet)
         {
             return await snippetProvider.SubmitSnippet(snippet);

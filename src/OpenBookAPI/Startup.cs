@@ -4,8 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.AspNet.Cors.Infrastructure;
-using Microsoft.AspNet.Authentication.JwtBearer;
+using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Swashbuckle.Swagger;
+using Microsoft.AspNet.Authentication.JwtBearer;
+using System.Threading.Tasks;
+using System;
+using System.Security.Claims;
 
 namespace OpenBookAPI
 {
@@ -39,7 +43,7 @@ namespace OpenBookAPI
             Modules.Register(services);
 
             //Swagger
-            services.AddSwagger();
+            //services.AddSwagger();
             services.ConfigureSwaggerDocument(options =>
             {
                 options.SingleApiVersion(new Info
@@ -62,17 +66,45 @@ namespace OpenBookAPI
         {
             app.UseStaticFiles();
             //app.UseIISPlatformHandler();
-            app.UseSwagger();
-            app.UseSwaggerUi();
+            //app.UseSwagger();
+            //app.UseSwaggerUi();
 
-            app.UseJwtBearerAuthentication(options=>
+            // app.UseJwtBearerAuthentication(options=>
+            // {
+            //     options.TokenValidationParameters.NameClaimType = "name";
+            //     options.Audience = Configuration["Auth0:ClientId"];
+            //     options.Authority = "https://" + Configuration["Auth0:Domain"];
+            //     //options.AutomaticAuthentication = true;
+            //     //options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler());
+            // });
+            
+            app.UseJwtBearerAuthentication(options =>
             {
-                options.TokenValidationParameters.NameClaimType = "name";
                 options.Audience = Configuration["Auth0:ClientId"];
                 options.Authority = "https://" + Configuration["Auth0:Domain"];
-                //options.AutomaticAuthentication = true;
-                //options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler());
+                options.RequireHttpsMetadata = false;
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        Console.WriteLine("Authentication failed.", context.Exception);
+                        return Task.FromResult(0);
+                    },
+                    OnValidatedToken = context =>
+					{
+						var claimsIdentity = context.AuthenticationTicket.Principal.Identity as ClaimsIdentity;
+                        claimsIdentity.AddClaim(new Claim("id_token", 
+                            context.Request.Headers["Authorization"][0].Substring(context.AuthenticationTicket.AuthenticationScheme.Length + 1)));
+                        
+                        // OPTIONAL: you can read/modify the claims that are populated based on the JWT
+                        // claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, claimsIdentity.FindFirst("name").Value));
+						return Task.FromResult(0);
+					}
+                };
             });
+            
+            
+
 
             //should go at the end
             app.UseMvc();
