@@ -2,6 +2,6 @@
   "Auth0": {
     "ClientId": "6Ax1d9qDK2k2OFT2iPu9JSvhdaEwaNXT",
     "ClientSecret":"_x1miDd98gucMenz0kLOwPR42BI4rN8154FaZIGW5xJwBLre7ybI7sJZGj4UnQxt",
-    "Domain": "openbook.eu.auth0.com"
+    "Domain": "https://openbook.eu.auth0.com/"
   }
 }

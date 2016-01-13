@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace OpenBookAPI.Controllers
 {
-    [EnableCors("OpenBookAPI")]
     [Route("api/[controller]")]
     public class SnippetController : Controller
     {
@@ -32,7 +31,7 @@ namespace OpenBookAPI.Controllers
         /// </summary>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Snippet"/>s</returns>
         // GET: api/Snippet
-        [HttpGet]
+        [HttpGet] 
         async public Task<IEnumerable<Snippet>> Get()
         {
             return await snippetProvider.GetSnippets();// snippetProvider.GetSnippets();
@@ -116,7 +115,7 @@ namespace OpenBookAPI.Controllers
         /// <returns>The created <see cref="Snippet"/></returns>
         // POST api/snippet
         [HttpPost]
-        [Authorize(ActiveAuthenticationSchemes = "Bearer")]
+        [Authorize]
         async public Task<Snippet> Post([FromBody]Snippet snippet)
         {
             return await snippetProvider.SubmitSnippet(snippet);

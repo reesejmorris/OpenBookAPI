@@ -43,7 +43,7 @@ namespace OpenBookAPI
             Modules.Register(services);
 
             //Swagger
-            //services.AddSwagger();
+            services.AddSwagger();
             services.ConfigureSwaggerDocument(options =>
             {
                 options.SingleApiVersion(new Info
@@ -66,8 +66,9 @@ namespace OpenBookAPI
         {
             app.UseStaticFiles();
             //app.UseIISPlatformHandler();
-            //app.UseSwagger();
-            //app.UseSwaggerUi();
+            app.UseCors("OpenBookAPI");
+            app.UseSwagger();
+            app.UseSwaggerUi();
 
             // app.UseJwtBearerAuthentication(options=>
             // {
@@ -81,10 +82,28 @@ namespace OpenBookAPI
             app.UseJwtBearerAuthentication(options =>
             {
                 options.Audience = Configuration["Auth0:ClientId"];
-                options.Authority = "https://" + Configuration["Auth0:Domain"];
+                options.Authority = Configuration["Auth0:Domain"];
+                options.AuthenticationScheme = "Bearer";
                 options.RequireHttpsMetadata = false;
+                options.AutomaticAuthenticate = true;
+                options.AutomaticChallenge = true;
                 options.Events = new JwtBearerEvents
                 {
+                    OnChallenge = context =>
+                    {
+                        Console.WriteLine("Authentication Challenge.");
+                        return Task.FromResult(0);
+                    },
+                    OnReceivingToken = context =>
+                    {
+                        Console.WriteLine("Token Recieving.");
+                        return Task.FromResult(0);
+                    },
+                    OnReceivedToken = context =>
+                    {
+                        Console.WriteLine("Token Recieved.");
+                        return Task.FromResult(0);
+                    },
                     OnAuthenticationFailed = context =>
                     {
                         Console.WriteLine("Authentication failed.", context.Exception);
@@ -92,12 +111,13 @@ namespace OpenBookAPI
                     },
                     OnValidatedToken = context =>
 					{
-						var claimsIdentity = context.AuthenticationTicket.Principal.Identity as ClaimsIdentity;
+                        Console.WriteLine("Token Validated.");
+                        var claimsIdentity = context.AuthenticationTicket.Principal.Identity as ClaimsIdentity;
                         claimsIdentity.AddClaim(new Claim("id_token", 
                             context.Request.Headers["Authorization"][0].Substring(context.AuthenticationTicket.AuthenticationScheme.Length + 1)));
                         
                         // OPTIONAL: you can read/modify the claims that are populated based on the JWT
-                        // claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, claimsIdentity.FindFirst("name").Value));
+                        //claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, claimsIdentity.FindFirst("name").Value));
 						return Task.FromResult(0);
 					}
                 };
