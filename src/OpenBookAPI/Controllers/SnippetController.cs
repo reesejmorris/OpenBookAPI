@@ -118,6 +118,8 @@ namespace OpenBookAPI.Controllers
         [Authorize]
         async public Task<Snippet> Post([FromBody]Snippet snippet)
         {
+            var identity = (System.Security.Claims.ClaimsIdentity)User.Identity;
+            snippet.Author = identity.Name;
             return await snippetProvider.SubmitSnippet(snippet);
         }
 
