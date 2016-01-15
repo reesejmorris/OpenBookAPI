@@ -6,6 +6,7 @@ using OpenBookAPI.Models;
 using Microsoft.AspNet.Cors;
 using Microsoft.AspNet.Authorization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace OpenBookAPI.Controllers
 {
@@ -15,15 +16,19 @@ namespace OpenBookAPI.Controllers
         private ISnippetProvider snippetProvider { get; set; }
         private IVoteProvider voteProvider { get; set; }
         private IFlagProvider flagProvider { get; set; }
+
+        private IConfiguration configuration { get; set; }
+
         /// <summary>
         /// Snippet Controller constructor
         /// </summary>
         /// <param name="provider">The injected <see cref="ISnippetProvider"/></param>
-        public SnippetController(ISnippetProvider snippetprovider, IVoteProvider voteprovider, IFlagProvider flagprovider)
+        public SnippetController(ISnippetProvider snippetprovider, IVoteProvider voteprovider, IFlagProvider flagprovider, IConfiguration config)
         {
             snippetProvider = snippetprovider;
             voteProvider = voteprovider;
             flagProvider = flagprovider;
+            configuration = config;
         }
 
         /// <summary>
@@ -119,7 +124,8 @@ namespace OpenBookAPI.Controllers
         async public Task<Snippet> Post([FromBody]Snippet snippet)
         {
             var identity = (System.Security.Claims.ClaimsIdentity)User.Identity;
-            snippet.Author = identity.Name;
+            snippet.Author = identity.FindFirst(configuration.Get<string>("Auth:AuthorClaim", "nickname")).Value;
+            snippet.AuthorId = identity.FindFirst(configuration.Get<string>("Auth:IdClaim", "_id")).Value;
             return await snippetProvider.SubmitSnippet(snippet);
         }
 

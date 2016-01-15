@@ -38,10 +38,11 @@ namespace OpenBookAPI
             OpenBookAPIcors.Methods.Add("*");
             OpenBookAPIcors.SupportsCredentials = true;
             services.AddCors(cors => cors.AddPolicy("OpenBookAPI", OpenBookAPIcors));
-            
+
             //Dependancy Injection
             Modules.Register(services);
-
+            services.AddInstance(typeof(IConfiguration),Configuration);
+            
             //Swagger
             services.AddSwagger();
             services.ConfigureSwaggerDocument(options =>
@@ -53,7 +54,7 @@ namespace OpenBookAPI
                     Description = "The API Backend for the OpenBookApp",
                     TermsOfService = "No Potatos.",
                 });
-                
+
             });
             services.ConfigureSwaggerSchema(options =>
             {
@@ -70,60 +71,15 @@ namespace OpenBookAPI
             app.UseSwagger();
             app.UseSwaggerUi();
 
-            // app.UseJwtBearerAuthentication(options=>
-            // {
-            //     options.TokenValidationParameters.NameClaimType = "name";
-            //     options.Audience = Configuration["Auth0:ClientId"];
-            //     options.Authority = "https://" + Configuration["Auth0:Domain"];
-            //     //options.AutomaticAuthentication = true;
-            //     //options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler());
-            // });
-            
             app.UseJwtBearerAuthentication(options =>
             {
-                options.Audience = Configuration["Auth0:ClientId"];
-                options.Authority = Configuration["Auth0:Domain"];
-                options.AuthenticationScheme = "Bearer";
+                options.Audience = Configuration["Auth:ClientId"];
+                options.Authority = Configuration["Auth:Domain"];
+                options.AuthenticationScheme = "Automatic";
                 options.RequireHttpsMetadata = false;
-                options.AutomaticAuthenticate = true;
-                options.AutomaticChallenge = true;
-                options.Events = new JwtBearerEvents
-                {
-                    OnChallenge = context =>
-                    {
-                        Console.WriteLine("Authentication Challenge.");
-                        return Task.FromResult(0);
-                    },
-                    OnReceivingToken = context =>
-                    {
-                        Console.WriteLine("Token Recieving.");
-                        return Task.FromResult(0);
-                    },
-                    OnReceivedToken = context =>
-                    {
-                        Console.WriteLine("Token Recieved.");
-                        return Task.FromResult(0);
-                    },
-                    OnAuthenticationFailed = context =>
-                    {
-                        Console.WriteLine("Authentication failed.", context.Exception);
-                        return Task.FromResult(0);
-                    },
-                    OnValidatedToken = context =>
-					{
-                        Console.WriteLine("Token Validated.");
-                        var claimsIdentity = context.AuthenticationTicket.Principal.Identity as ClaimsIdentity;
-                        claimsIdentity.AddClaim(new Claim("id_token", 
-                            context.Request.Headers["Authorization"][0].Substring(context.AuthenticationTicket.AuthenticationScheme.Length + 1)));
-                        
-                        // OPTIONAL: you can read/modify the claims that are populated based on the JWT
-                        //claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, claimsIdentity.FindFirst("name").Value));
-						return Task.FromResult(0);
-					}
-                };
             });
-            
-            
+
+
 
 
             //should go at the end

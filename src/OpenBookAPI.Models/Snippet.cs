@@ -13,6 +13,7 @@ namespace OpenBookAPI.Models
         public bool NewParagraph { get; set; }
         public string Content { get; set; }
         public string Author { get; set; }
+        public string AuthorId { get; set; }
         public int Score { get; set; }
         public int Flags { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
