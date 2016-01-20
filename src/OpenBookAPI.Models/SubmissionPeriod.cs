@@ -29,6 +29,10 @@ namespace OpenBookAPI.Models
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public SubmissionPeriodStatus Status { get; set; }
+        /// <summary>
+        /// Datetime that the submissionperiod started
+        /// </summary>
+        public DateTime StartDate { get; set; }
     }
 
     public enum SubmissionPeriodStatus

@@ -21,6 +21,12 @@ namespace OpenBookAPI.Logic
         {
             return _repository.GetAll();
         }
+
+        public SubmissionPeriod GetCurrentSubmissionPeriodForStory(Guid storyId)
+        {
+            return _repository.GetByStoryId(storyId).OrderBy(x => x.StartDate).FirstOrDefault(x=>x.Status == SubmissionPeriodStatus.Open);
+        }
+
         public SubmissionPeriod GetSubmissionPeriod(Guid id)
         {
             return _repository.GetById(id);

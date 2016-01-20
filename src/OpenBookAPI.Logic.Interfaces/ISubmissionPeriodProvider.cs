@@ -8,5 +8,6 @@ namespace OpenBookAPI.Logic.Interfaces
     {
         SubmissionPeriod GetSubmissionPeriod(Guid id);
         IEnumerable<SubmissionPeriod> GetSubmissionPeriods();
+        SubmissionPeriod GetCurrentSubmissionPeriodForStory(Guid storyId);
     }
 }
