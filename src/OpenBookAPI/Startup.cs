@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNet.Builder;
+﻿using System.IdentityModel.Tokens;
+using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.AspNet.Cors.Infrastructure;
-using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Swashbuckle.Swagger;
 using Microsoft.AspNet.Authentication.JwtBearer;
 using System.Threading.Tasks;
-using System;
-using System.Security.Claims;
 
 namespace OpenBookAPI
 {
@@ -56,10 +54,10 @@ namespace OpenBookAPI
                 });
 
             });
-            services.ConfigureSwaggerSchema(options =>
-            {
-                options.DescribeAllEnumsAsStrings = true;
-            });
+            //services.ConfigureSwaggerSchema(options =>
+            //{
+            //    options.DescribeAllEnumsAsStrings = true;
+            //});
         }
 
         // Configure is called after ConfigureServices is called.
@@ -70,18 +68,17 @@ namespace OpenBookAPI
             app.UseCors("OpenBookAPI");
             app.UseSwagger();
             app.UseSwaggerUi();
-
             app.UseJwtBearerAuthentication(options =>
             {
                 options.Audience = Configuration["Auth:ClientId"];
                 options.Authority = Configuration["Auth:Domain"];
                 options.AuthenticationScheme = "Automatic";
                 options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateLifetime = true
+                };
             });
-
-
-
-
             //should go at the end
             app.UseMvc();
         }
