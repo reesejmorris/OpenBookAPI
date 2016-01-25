@@ -64,7 +64,7 @@ namespace OpenBookAPI
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseStaticFiles();
-            //app.UseIISPlatformHandler();
+            app.UseIISPlatformHandler();
             app.UseCors("OpenBookAPI");
             app.UseSwagger();
             app.UseSwaggerUi();
