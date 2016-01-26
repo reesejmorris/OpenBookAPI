@@ -8,5 +8,6 @@ namespace OpenBookAPI.Logic.Interfaces
     {
         IEnumerable<Story> GetStories();
         Story GetStory(Guid id);
+        Story GetLatest();
     }
 }

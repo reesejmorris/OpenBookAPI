@@ -26,11 +26,18 @@ namespace OpenBookAPI.Controllers
             return _provider.GetSubmissionPeriods();
         }
 
-        // GET 
+        // GET by id 
         [HttpGet("{id:Guid}")]
         public SubmissionPeriod Get(Guid id)
         {
             return _provider.GetSubmissionPeriod(id);
+        }
+        
+        // GET current for story
+        [HttpGet("~/api/story/{storyId:Guid}/currentsubmission")]
+        public SubmissionPeriod GetCurrentForStory(Guid storyId)
+        {
+            return _provider.GetCurrentForStory(storyId);
         }
     }
 }

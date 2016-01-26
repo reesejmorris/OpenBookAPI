@@ -16,6 +16,15 @@ namespace OpenBookAPI.Logic
         {
             _repository = repository;
         }
+
+        public Story GetLatest()
+        {
+            return _repository
+                        .GetAll()
+                        .OrderByDescending(x=>x.StartDate)
+                        .FirstOrDefault(x=>x.StartDate<DateTime.Now && x.Status == StoryStatus.Open);
+        }
+
         public IEnumerable<Story> GetStories()
         {
             return _repository.GetAll();

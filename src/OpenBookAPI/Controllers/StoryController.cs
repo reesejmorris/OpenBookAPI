@@ -32,6 +32,13 @@ namespace OpenBookAPI.Controllers
         {
             return StoryProvider.GetStories();
         }
+        // GET: api/Story/Latest
+        [HttpGet("latest")]
+        public Story GetLatest()
+        {
+            return StoryProvider.GetLatest();
+        }
+
 
         // GET: api/Story/{id:Guid}/SoFar
         [HttpGet("{id:Guid}/SoFar")]

@@ -41,7 +41,7 @@ namespace OpenBookAPI.Data.InMemory
                     StoryId = storyId,
                     SubmissionDate = new DateTime(2015,10,11,6,0,0),
                     Score = 5,
-                    Status = SnippetStatus.Submitted,
+                    Status = SnippetStatus.Chosen,
                     SubmissionPeriodId = submission1
                 },new Snippet{
                     Id = new Guid("1227e500-071c-48ef-b92d-690a99d0ec21"),
@@ -55,7 +55,7 @@ namespace OpenBookAPI.Data.InMemory
                     SubmissionPeriodId = submission1
                 },
                 new Snippet{
-                    Id = Guid.NewGuid(),
+                    Id = new Guid("1227e500-071c-48ef-b92d-690a99d0ec21"),
                     Content = "Once upon a time there was a little boy named Reese,",
                     Author = "John",
                     NewParagraph = false,
@@ -65,7 +65,7 @@ namespace OpenBookAPI.Data.InMemory
                     Status = SnippetStatus.Submitted,
                     SubmissionPeriodId = submission2
                 },new Snippet{
-                    Id = Guid.NewGuid(),
+                    Id = new Guid("1227e500-071c-48ef-b92d-690a99d0ec21"),
                     Content = "He was always late for his lunch appointments.",
                     Author = "John",
                     NewParagraph = false,
@@ -75,7 +75,7 @@ namespace OpenBookAPI.Data.InMemory
                     Status = SnippetStatus.Chosen,
                     SubmissionPeriodId = submission2,
                 },new Snippet{
-                    Id = Guid.NewGuid(),
+                    Id = new Guid("1227e500-071c-48ef-b92d-690a99d0ec21"),
                     Content = "BLAH BLAH BLAH.",
                     Author = "John",
                     NewParagraph = true,
