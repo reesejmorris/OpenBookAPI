@@ -102,6 +102,23 @@ namespace OpenBookAPI.Controllers
         }
 
         /// <summary>
+        /// Creates a <see cref="Snippet"/> for a submission period
+        /// </summary>
+        /// <param name="submissionPeriodId">The <see cref="Guid"/> of the submission period</param>
+        /// <returns>A <see cref="Snippet"/></returns>
+        // GET api/story/{story_id:Guid}/snippet
+        [HttpPost("~/api/submissionperiod/{submissionPeriodId:Guid}/snippet")]
+        async public Task<Snippet> SubmitForSubmissionPeriod(Guid submissionPeriodId,[FromBody]Snippet snippet)
+        {
+            var identity = (System.Security.Claims.ClaimsIdentity)User.Identity;
+            snippet.Author = identity.FindFirst(configuration.Get<string>("Auth:AuthorClaim", "nickname")).Value;
+            snippet.AuthorId = identity.FindFirst(configuration.Get<string>("Auth:IdClaim", "_id")).Value;
+            snippet.SubmissionPeriodId = submissionPeriodId;
+            snippet.Status = SnippetStatus.Submitted;
+            return await snippetProvider.SubmitSnippet(snippet);
+        }
+        
+        /// <summary>
         /// Gets all the <see cref="Snippet"/>s for a story
         /// </summary>
         /// <param name="storyId">The <see cref="Guid"/> of the story</param>

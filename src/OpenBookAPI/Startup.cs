@@ -8,6 +8,9 @@ using Microsoft.AspNet.Cors.Infrastructure;
 using Swashbuckle.Swagger;
 using Microsoft.AspNet.Authentication.JwtBearer;
 using System.Threading.Tasks;
+using Serilog;
+using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace OpenBookAPI
 {
@@ -20,6 +23,12 @@ namespace OpenBookAPI
                                 .SetBasePath(appEnv.ApplicationBasePath)
                                 .AddJsonFile("config.json")
                                 .AddEnvironmentVariables();
+                                
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                //.WriteTo.RollingFile(Path.Combine(appEnv.ApplicationBasePath,"log-{Date}.txt"))
+                .WriteTo.Console()
+                .CreateLogger();
             Configuration = builder.Build();
         }
 
@@ -27,7 +36,10 @@ namespace OpenBookAPI
         // Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new GlobalExceptionFilter(Log.Logger));
+            });
 
             //CORS -- temporary currently allow anyone to connect
             var OpenBookAPIcors = new CorsPolicy();
@@ -54,6 +66,8 @@ namespace OpenBookAPI
                 });
 
             });
+           
+
             //services.ConfigureSwaggerSchema(options =>
             //{
             //    options.DescribeAllEnumsAsStrings = true;
@@ -61,7 +75,7 @@ namespace OpenBookAPI
         }
 
         // Configure is called after ConfigureServices is called.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app,ILoggerFactory loggerFactory, IHostingEnvironment env)
         {
             app.UseStaticFiles();
             app.UseIISPlatformHandler();
@@ -81,6 +95,7 @@ namespace OpenBookAPI
             });
             //should go at the end
             app.UseMvc();
+            loggerFactory.AddSerilog();
         }
     }
 }

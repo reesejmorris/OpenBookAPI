@@ -12,12 +12,14 @@
     "Swashbuckle": "6.0.0-rc1-final",
     "Swashbuckle.Swagger": "6.0.0-rc1-final",
     "System.Net.Http": "4.0.1-beta-23225",
-    "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final"
+    "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
+    "Serilog.Framework.Logging": "1.0.0-rc1-final-10083"
   },
 
   "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel",
-    "kestrel": "Microsoft.AspNet.Server.Kestrel"
+    "web": "Microsoft.AspNet.Server.Kestrel  --server.urls http://localhost:5000",
+    "kestrel": "Microsoft.AspNet.Server.Kestrel --server.urls http://0.0.0.0:5000"
   },
 
   "frameworks": {
