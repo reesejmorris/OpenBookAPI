@@ -95,16 +95,16 @@ namespace OpenBookAPI.Data.InMemory
 
         public async Task<IEnumerable<Snippet>> GetAll()
         {
-            return _dataContext;
+            return _dataContext.OrderByDescending(s=>s.Score);
         }
         public async Task<IEnumerable<Snippet>> GetByStory(Guid storyId)
         {
-            return _dataContext.Where(a=>a.StoryId == storyId);
+            return _dataContext.Where(a=>a.StoryId == storyId).OrderByDescending(s=>s.Score);
         }
 
         public async Task<IEnumerable<Snippet>> GetBySubmissionPeriodId(Guid submissionPeriodId)
         {
-            return _dataContext.Where(sp => sp.SubmissionPeriodId == submissionPeriodId);
+            return _dataContext.Where(sp => sp.SubmissionPeriodId == submissionPeriodId).OrderByDescending(s=>s.Score);
         }
 
         public async Task<Snippet> Create(Snippet snippet)
