@@ -1,14 +1,13 @@
 {
     "version": "1.0.0-*",
-    "description": "OpenBookAPI.HttpCache Class Library",
+    "description": "OpenBookAPI.Data.DocumentDB Class Library",
     "authors": [ "John" ],
     "tags": [ "" ],
     "projectUrl": "",
     "licenseUrl": "",
 
   "dependencies": {
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-    "Serilog.Framework.Logging": "1.0.0-rc1-final-10083"
+      "Microsoft.Azure.Documents.Client":"0.9.0-Preview"
   },
   "frameworks": {
     "dnx451": { }

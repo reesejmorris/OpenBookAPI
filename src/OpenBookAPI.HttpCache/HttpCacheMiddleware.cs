@@ -17,25 +17,50 @@ namespace OpenBookAPI.HttpCache{
         }
 
         public async Task Invoke(HttpContext context){
+            if(context.Request.Method == "GET")
+            {
+                await HandleQuery(context);
+            }   
+            else 
+            {
+                await HandleCommand(context);
+            }
             
+        } 
+        protected async Task HandleCommand(HttpContext context){
+            var url = context.Request.Path;
+            await _next.Invoke(context);
+            if(context.Response.StatusCode == 200)
+            {
+                _logger.Information($"Invalidating ({url})");
+                await _store.Invalidate(url);
+            }
+            
+        }
+        protected async Task HandleQuery(HttpContext context){
             using (var memoryStream = new MemoryStream())
             {
-                if(context.Request.Method != "GET")
-                {
-                    await _next.Invoke(context);
-                    return;
-                }   
+                var bodyStream = context.Response.Body;
+                context.Response.Body = memoryStream;
+                
                 var url = context.Request.Path;
                 _logger.Information($"GET request recieved ({url}), checking cache...");
                 var resp = await _store.Get(url);
-                if(resp ==null)
+                if(resp == null)
                 {
                     _logger.Information("No cache entry found, invoke next");
                     await _next.Invoke(context);
                     //add response body to the store
                     if(context.Response.ContentType.StartsWith("application/json") && context.Response.StatusCode == 200)
                     {
-                        await _store.Set(url,"{'HELLO':'HELLO'}" ,DateTime.Now.AddHours(1));
+                        var jsonResponse = string.Empty;
+                        using(var sr = new StreamReader(memoryStream)){
+                            memoryStream.Seek(0,SeekOrigin.Begin);
+                            jsonResponse = await sr.ReadToEndAsync();
+                            memoryStream.Seek(0,SeekOrigin.Begin);
+                            await _store.Set(url,jsonResponse ,DateTime.Now.AddHours(1));
+                            await memoryStream.CopyToAsync(bodyStream);
+                        }
                         return;
                     }
                     else
@@ -43,22 +68,13 @@ namespace OpenBookAPI.HttpCache{
                         _logger.Information($"Entry not cached, content type: ({context.Response.ContentType}), response code: ({context.Response.StatusCode})");
                     }     
                 }        
-                _logger.Information($"Found cache entry,{Environment.NewLine} {resp} {Environment.NewLine}  returning");
-                //short circuit the pipeline and return the response from the cache
-                context.Response.StatusCode = 200;
+                _logger.Information($"Found cache entry {url} returning");
+                //await context.Response.WriteAsync(resp);
+                await context.Response.WriteAsync(resp);
                 context.Response.ContentType = "application/json";
-                context.Response.ContentLength = resp.Length;
-                var ms = new MemoryStream();
-                await context.Response.Body.CopyToAsync(ms);
-                using(var sw = new StreamWriter(ms))
-                {
-                    sw.Write(resp);
-                }
-                await ms.CopyToAsync(context.Response.Body);
+                memoryStream.Seek(0,SeekOrigin.Begin);
+                await memoryStream.CopyToAsync(bodyStream);
             }
-        } 
-        protected void AddToCache(HttpContext context){
-            
         }
     }
 }

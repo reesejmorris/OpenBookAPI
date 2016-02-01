@@ -27,8 +27,7 @@
     "dnx451": {
       "dependencies": {
       }
-    },
-    "dnxcore50": { }
+    }
   },
 
   "exclude": [
