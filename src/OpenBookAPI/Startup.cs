@@ -1,16 +1,17 @@
-﻿using System.IdentityModel.Tokens;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.PlatformAbstractions;
-using Microsoft.AspNet.Cors.Infrastructure;
-using Swashbuckle.Swagger;
-using Microsoft.AspNet.Authentication.JwtBearer;
+﻿using System.IO;
+using System.IdentityModel.Tokens;
 using System.Threading.Tasks;
-using Serilog;
-using System.IO;
+using Microsoft.AspNet.Authentication.JwtBearer;
+using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Cors.Infrastructure;
+using Microsoft.AspNet.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
+using Serilog;
+using Swashbuckle.Swagger;
+using OpenBookAPI.HttpCache;
 
 namespace OpenBookAPI
 {
@@ -52,7 +53,8 @@ namespace OpenBookAPI
             //Dependancy Injection
             Modules.Register(services);
             services.AddInstance(typeof(IConfiguration),Configuration);
-            
+            services.AddInstance(typeof(ICacheStore),new CacheStore());
+            services.AddInstance<Serilog.ILogger>(Log.Logger);
             //Swagger
             services.AddSwagger();
             services.ConfigureSwaggerDocument(options =>
@@ -82,6 +84,7 @@ namespace OpenBookAPI
             app.UseCors("OpenBookAPI");
             app.UseSwagger();
             app.UseSwaggerUi();
+            app.UseHttpCache();
             app.UseJwtBearerAuthentication(options =>
             {
                 options.Audience = Configuration["Auth:ClientId"];

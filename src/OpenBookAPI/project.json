@@ -9,6 +9,7 @@
     "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-rc1-final",
     "OpenBookAPI.Logic.Interfaces": "1.0.0-*",
     "OpenBookAPI.Modules": "1.0.0-*",
+    "OpenBookAPI.HttpCache": "1.0.0-*",
     "Swashbuckle": "6.0.0-rc1-final",
     "Swashbuckle.Swagger": "6.0.0-rc1-final",
     "System.Net.Http": "4.0.1-beta-23225",
