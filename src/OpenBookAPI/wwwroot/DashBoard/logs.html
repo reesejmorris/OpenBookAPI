@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AngularJS - SignalR - ServiceDashboard</title>
+    <script src="scripts/jquery-2.2.0.min.js"></script>
+    <script src="scripts/jquery.signalr-2.2.0.min.js"></script>
+    <script src="scripts/angular.min.js"></script>
+    <script src="scripts/app.js"></script>
+    </head>
+    <body ng-app="angularServiceDashboard">
+        <div class="row" ng-controller="LogController">
+            <ul>
+                <li ng-repeat="log in logs" data-level="{{log.Level}}">
+                    {{log.Timestamp}}-{{log.RenderedMessage}}
+                </li>    
+            </ul>
+        </div>
+    </body> 
+</html>
+

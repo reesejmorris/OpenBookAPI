@@ -1,13 +1,7 @@
-﻿using System.IO;
-using System.IdentityModel.Tokens;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Authentication.JwtBearer;
+﻿using System.IdentityModel.Tokens;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Cors.Infrastructure;
 using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Mvc.Infrastructure;
-using Microsoft.AspNet.Mvc.Internal;
-using Microsoft.AspNet.Mvc.Routing;
 using Microsoft.AspNet.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +10,10 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Serilog;
 using Swashbuckle.Swagger;
 using OpenBookAPI.HttpCache;
+using Serilog.Sinks.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
+using OpenBookAPI.SignalR.Hubs;
+using System;
 
 namespace OpenBookAPI
 {
@@ -31,13 +29,9 @@ namespace OpenBookAPI
                                 .SetBasePath(appEnv.ApplicationBasePath)
                                 .AddJsonFile("config.json")
                                 .AddEnvironmentVariables();
-                                
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                //.WriteTo.RollingFile(Path.Combine(appEnv.ApplicationBasePath,"log-{Date}.txt"))
-                .WriteTo.Trace()
-                .WriteTo.Console()
-                .CreateLogger();
+            
+            
+            
             Configuration = builder.Build();
         }
 
@@ -65,7 +59,7 @@ namespace OpenBookAPI
             Modules.Register(services);
             services.AddInstance(typeof(IConfiguration),Configuration);
             services.AddInstance(typeof(ICacheStore), cacheStore);
-            services.AddInstance<Serilog.ILogger>(Log.Logger);
+            
             services.AddInstance<IRouter>(_router);
             
 
@@ -90,10 +84,15 @@ namespace OpenBookAPI
             {
                 options.Hubs.EnableDetailedErrors = true;
             });
+            
+            
+            
+            
+            services.AddInstance<Serilog.ILogger>(Log.Logger);
         }
 
         // Configure is called after ConfigureServices is called.
-        public void Configure(IApplicationBuilder app,ILoggerFactory loggerFactory, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app,ILoggerFactory loggerFactory, IHostingEnvironment env,IRuntimeEnvironment runtimeEnv,IConnectionManager connectionManager)
         {
             app.UseStaticFiles();
             app.UseIISPlatformHandler();
@@ -101,7 +100,7 @@ namespace OpenBookAPI
             app.UseSwagger();
             app.UseSwaggerUi();
             app.UseSignalR();
-
+            var hubContext = connectionManager.GetHubContext<OpenBookAPI.SignalR.Hubs.LogHub>();
             app.UseJwtBearerAuthentication(options =>
             {
                 options.Audience = Configuration["Auth:ClientId"];
@@ -113,6 +112,20 @@ namespace OpenBookAPI
                     ValidateLifetime = true
                 };
             });
+            
+            var loggerConfiguration = new LoggerConfiguration().MinimumLevel.Information()
+                .WriteTo.Trace()
+                .WriteTo.Console()
+                .WriteTo.Sink(new SignalRSink(hubContext,10,TimeSpan.FromSeconds(10)));
+                                    
+            if(runtimeEnv.RuntimeType == "Windows")
+            {
+                loggerConfiguration.WriteTo.AzureDocumentDB(new System.Uri("https://openbook.documents.azure.com:443/"),"j4Hzifc5HL6z4uNt152t6ECrI5J7peGpSJDlwfkEzn5Vs94pAxf71N3sw3iQS6YneXC0CvxA+MdQjP/GKVbo6A==");
+            }
+            
+            Log.Logger = loggerConfiguration.CreateLogger();
+            Log.Logger.Debug($"environment = {runtimeEnv.RuntimeType}");
+            
             //should go at the end
             app.UseMvc();
             loggerFactory.AddSerilog();

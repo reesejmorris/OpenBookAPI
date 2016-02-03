@@ -16,7 +16,8 @@
     "System.Net.Http": "4.0.1-beta-23225",
     "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
-    "Serilog.Framework.Logging": "1.0.0-rc1-final-10083"
+    "Serilog.Framework.Logging": "1.0.0-rc1-final-10083",
+    "Serilog.Sinks.AzureDocumentDb": "1.5.7"
   },
 
   "commands": {
