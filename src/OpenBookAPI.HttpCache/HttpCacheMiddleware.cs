@@ -1,23 +1,33 @@
 using System;
 using System.IO;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc.Abstractions;
+using Microsoft.AspNet.Mvc.Infrastructure;
+using Microsoft.AspNet.Mvc.Routing;
+using Microsoft.AspNet.Routing;
 using Serilog;
 
 namespace OpenBookAPI.HttpCache{
+    [Obsolete("Use HttpCacheActionFilter")]
     public class HttpCacheMiddleware{
         private readonly ILogger _logger;
         private readonly RequestDelegate _next;
         private readonly ICacheStore _store;
-        public HttpCacheMiddleware(RequestDelegate next, ICacheStore store, ILogger logger){
+
+        public HttpCacheMiddleware(RequestDelegate next, ICacheStore store, ILogger logger, IRouter router)
+        {
             _next = next;
             _store = store;
             _logger = logger;
         }
 
-        public async Task Invoke(HttpContext context){
-            if(context.Request.Method == "GET")
+        public async Task Invoke(HttpContext context)
+        {
+            if (context.Request.Method == "GET")
             {
                 await HandleQuery(context);
             }   
@@ -25,7 +35,6 @@ namespace OpenBookAPI.HttpCache{
             {
                 await HandleCommand(context);
             }
-            
         } 
         protected async Task HandleCommand(HttpContext context){
             var url = context.Request.Path;
@@ -35,7 +44,6 @@ namespace OpenBookAPI.HttpCache{
                 _logger.Information($"Invalidating ({url})");
                 await _store.Invalidate(url);
             }
-            
         }
         protected async Task HandleQuery(HttpContext context){
             using (var memoryStream = new MemoryStream())

@@ -5,6 +5,10 @@ using Microsoft.AspNet.Authentication.JwtBearer;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Cors.Infrastructure;
 using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Mvc.Infrastructure;
+using Microsoft.AspNet.Mvc.Internal;
+using Microsoft.AspNet.Mvc.Routing;
+using Microsoft.AspNet.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -17,9 +21,12 @@ namespace OpenBookAPI
 {
     public class Startup
     {
+        private RouteBuilder _routeBuilder;
+        private IRouter _router;
         public IConfiguration Configuration { get; set; }
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
+            _router = new RouteCollection();
             var builder = new ConfigurationBuilder()
                                 .SetBasePath(appEnv.ApplicationBasePath)
                                 .AddJsonFile("config.json")
@@ -28,6 +35,7 @@ namespace OpenBookAPI
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 //.WriteTo.RollingFile(Path.Combine(appEnv.ApplicationBasePath,"log-{Date}.txt"))
+                .WriteTo.Trace()
                 .WriteTo.Console()
                 .CreateLogger();
             Configuration = builder.Build();
@@ -37,9 +45,11 @@ namespace OpenBookAPI
         // Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
+            var cacheStore = new CacheStore();
             services.AddMvc(options =>
             {
                 options.Filters.Add(new GlobalExceptionFilter(Log.Logger));
+                options.Filters.Add(new HttpCacheActionFilter(cacheStore, Log.Logger));
             });
 
             //CORS -- temporary currently allow anyone to connect
@@ -50,11 +60,17 @@ namespace OpenBookAPI
             OpenBookAPIcors.SupportsCredentials = true;
             services.AddCors(cors => cors.AddPolicy("OpenBookAPI", OpenBookAPIcors));
 
+
             //Dependancy Injection
             Modules.Register(services);
             services.AddInstance(typeof(IConfiguration),Configuration);
-            services.AddInstance(typeof(ICacheStore),new CacheStore());
+            services.AddInstance(typeof(ICacheStore), cacheStore);
             services.AddInstance<Serilog.ILogger>(Log.Logger);
+            services.AddInstance<IRouter>(_router);
+           
+
+            
+
             //Swagger
             services.AddSwagger();
             services.ConfigureSwaggerDocument(options =>
@@ -68,7 +84,7 @@ namespace OpenBookAPI
                 });
 
             });
-           
+            
 
             //services.ConfigureSwaggerSchema(options =>
             //{
@@ -84,7 +100,8 @@ namespace OpenBookAPI
             app.UseCors("OpenBookAPI");
             app.UseSwagger();
             app.UseSwaggerUi();
-            app.UseHttpCache();
+            //app.UseHttpCache();
+
             app.UseJwtBearerAuthentication(options =>
             {
                 options.Audience = Configuration["Auth:ClientId"];

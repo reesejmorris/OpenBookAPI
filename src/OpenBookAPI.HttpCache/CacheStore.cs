@@ -1,23 +1,26 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.ExceptionServices;
+
 namespace OpenBookAPI.HttpCache{
     public class CacheStore : ICacheStore
     {
         public CacheStore(){
-            _data = new Dictionary<string,CacheEntry>();
+            _data = new List<CacheEntry>();
         }
-        private readonly Dictionary<string,CacheEntry> _data; 
+        private readonly List<CacheEntry> _data; 
         public async Task<string> Get(string Url)
         {
-            CacheEntry entry;
-            if(_data.TryGetValue(Url, out entry)&&entry.ValidUntil>DateTime.Now)
-                return entry.ResponseBody;
-            return null;
+            return _data.FirstOrDefault(x=>x.Url == Url && x.ValidUntil > DateTime.Now)?.ResponseBody;
         }
         public async Task Invalidate(string Url)
         {
-            _data.Remove(Url);
+            foreach (var item in _data.Where(x => x.Url.StartsWith(Url.Split('|').First())))
+            {
+                item.ValidUntil = DateTime.Now.AddHours(-1);
+            }
         }
 
         public async Task Set(string Url, string ResponseBody, DateTime ValidUntil)
@@ -27,7 +30,7 @@ namespace OpenBookAPI.HttpCache{
                 ValidUntil = ValidUntil,
                 Url = Url
             };
-            _data.Add(Url,entry);
+            _data.Add(entry);
         }
     }
 }
