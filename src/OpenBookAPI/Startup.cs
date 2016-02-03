@@ -67,7 +67,7 @@ namespace OpenBookAPI
             services.AddInstance(typeof(ICacheStore), cacheStore);
             services.AddInstance<Serilog.ILogger>(Log.Logger);
             services.AddInstance<IRouter>(_router);
-           
+            
 
             
 
@@ -86,10 +86,10 @@ namespace OpenBookAPI
             });
             
 
-            //services.ConfigureSwaggerSchema(options =>
-            //{
-            //    options.DescribeAllEnumsAsStrings = true;
-            //});
+            services.AddSignalR(options =>
+            {
+                options.Hubs.EnableDetailedErrors = true;
+            });
         }
 
         // Configure is called after ConfigureServices is called.
@@ -100,7 +100,7 @@ namespace OpenBookAPI
             app.UseCors("OpenBookAPI");
             app.UseSwagger();
             app.UseSwaggerUi();
-            //app.UseHttpCache();
+            app.UseSignalR();
 
             app.UseJwtBearerAuthentication(options =>
             {

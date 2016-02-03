@@ -17,8 +17,7 @@ namespace OpenBookAPI.HttpCache{
         private readonly ILogger _logger;
         private readonly RequestDelegate _next;
         private readonly ICacheStore _store;
-
-        public HttpCacheMiddleware(RequestDelegate next, ICacheStore store, ILogger logger, IRouter router)
+        public HttpCacheMiddleware(RequestDelegate next, ICacheStore store, ILogger logger)
         {
             _next = next;
             _store = store;
