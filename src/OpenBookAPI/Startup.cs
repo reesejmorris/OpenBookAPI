@@ -134,9 +134,6 @@ namespace OpenBookAPI
             }
 
             loggerFactory.AddSerilog(signalRlogger);
-            Log.Logger = signalRlogger;
-            loggerFactory.AddSerilog(Log.Logger);
-
 
             //should go at the end
             app.UseMvc();
