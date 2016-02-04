@@ -9,8 +9,8 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Abstractions;
 using Microsoft.AspNet.Mvc.Filters;
 using Microsoft.AspNet.Routing;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Serilog;
 
 namespace OpenBookAPI.HttpCache
 {
@@ -20,7 +20,7 @@ namespace OpenBookAPI.HttpCache
         private ActionExecutionDelegate _next;
         private readonly ICacheStore _store;
 
-        public HttpCacheActionFilter(ICacheStore store, ILogger logger)
+        public HttpCacheActionFilter(ICacheStore store, ILogger<HttpCacheActionFilter> logger)
         {
             _store = store;
             _logger = logger;
@@ -46,13 +46,29 @@ namespace OpenBookAPI.HttpCache
             await next();
         }
 
+        protected string GetUrl(FilterContext context)
+        {
+            FilterContext castedContext;
+            var url = string.Empty;
+            if (context.GetType().ToString() == "ResultExecutingContext")
+            {
+                url = ((ResultExecutingContext)context).Controller.GetType() + "|" + context.ActionDescriptor.DisplayName + "|" + string.Join(",", context.ActionDescriptor.Properties.Values.Select(x => x.ToString()).ToList());
+            }
+            else
+            {
+                url = ((ResultExecutedContext)context).Controller.GetType() + "|" + context.ActionDescriptor.DisplayName + "|" + string.Join(",",context.ActionDescriptor.Properties.Values.Select(x=>x.ToString()).ToList());
+            }
+
+            return url;
+        }
+
         private async Task HandleQueryResponse(ResultExecutingContext context)
         {
             if (context.Result.GetType() != typeof (Microsoft.AspNet.Mvc.ObjectResult))
                 return;
 
             var url = context.Controller.GetType() + "|" + context.ActionDescriptor.DisplayName;
-            _logger.Debug("No cache entry found, invoke next");
+            _logger.LogWarning("No cache entry found, invoke next");
             //add response body to the store
             if (context.HttpContext.Response.StatusCode == 200)
             {
@@ -61,7 +77,7 @@ namespace OpenBookAPI.HttpCache
             }
             else
             {
-                _logger.Debug($"Entry not cached, content type: ({context.HttpContext.Response.ContentType}), response code: ({context.HttpContext.Response.StatusCode})");
+                _logger.LogWarning($"Entry not cached, content type: ({context.HttpContext.Response.ContentType}), response code: ({context.HttpContext.Response.StatusCode})");
             }
         }
 
@@ -70,14 +86,14 @@ namespace OpenBookAPI.HttpCache
             var url = context.Controller.GetType() +"|"+ context.ActionDescriptor.DisplayName;
             if (context.HttpContext.Response.StatusCode == 200)
             {
-                _logger.Information($"Invalidating ({url})");
+                _logger.LogWarning($"Invalidating ({url})");
                 await _store.Invalidate(url);
             }
         }
         private async Task HandleQueryRequest(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var url = context.Controller.GetType() + "|" + context.ActionDescriptor.DisplayName;
-            _logger.Information($"GET request recieved ({url}), checking cache...");
+            _logger.LogWarning($"GET request recieved ({url}), checking cache...");
             
             var resp = await _store.Get(url);
             if (resp == null)
@@ -85,7 +101,7 @@ namespace OpenBookAPI.HttpCache
             else
             {
                 context.Result = new JsonResult(JsonConvert.DeserializeObject(resp));
-                _logger.Information($"Found cache entry {url} returning");
+                _logger.LogWarning($"Found cache entry {url} returning");
             }
         }
     }

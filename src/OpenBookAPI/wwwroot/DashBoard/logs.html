@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,7 +12,7 @@
     <body ng-app="angularServiceDashboard">
         <div class="row" ng-controller="LogController">
             <ul>
-                <li ng-repeat="log in logs" data-level="{{log.Level}}">
+                <li ng-repeat="log in logs | orderBy:'-Timestamp'" data-level="{{log.Level}}">
                     {{log.Timestamp}}-{{log.RenderedMessage}}
                 </li>    
             </ul>

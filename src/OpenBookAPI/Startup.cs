@@ -14,6 +14,7 @@ using Serilog.Sinks.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using OpenBookAPI.SignalR.Hubs;
 using System;
+using Serilog.Events;
 
 namespace OpenBookAPI
 {
@@ -40,11 +41,7 @@ namespace OpenBookAPI
         public void ConfigureServices(IServiceCollection services)
         {
             var cacheStore = new CacheStore();
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(new GlobalExceptionFilter(Log.Logger));
-                options.Filters.Add(new HttpCacheActionFilter(cacheStore, Log.Logger));
-            });
+            
 
             //CORS -- temporary currently allow anyone to connect
             var OpenBookAPIcors = new CorsPolicy();
@@ -59,11 +56,11 @@ namespace OpenBookAPI
             Modules.Register(services);
             services.AddInstance(typeof(IConfiguration),Configuration);
             services.AddInstance(typeof(ICacheStore), cacheStore);
-            
+            services.AddSingleton<HttpCacheActionFilter>();
             services.AddInstance<IRouter>(_router);
-            
+            services.AddInstance<Serilog.ILogger>(Log.Logger);
 
-            
+
 
             //Swagger
             services.AddSwagger();
@@ -84,11 +81,12 @@ namespace OpenBookAPI
             {
                 options.Hubs.EnableDetailedErrors = true;
             });
-            
-            
-            
-            
-            services.AddInstance<Serilog.ILogger>(Log.Logger);
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(GlobalExceptionFilter));
+                options.Filters.Add(typeof(HttpCacheActionFilter)); //new HttpCacheActionFilter(cacheStore, Log.Logger));
+            });
         }
 
         // Configure is called after ConfigureServices is called.
@@ -112,23 +110,37 @@ namespace OpenBookAPI
                     ValidateLifetime = true
                 };
             });
-            
-            var loggerConfiguration = new LoggerConfiguration().MinimumLevel.Information()
+            var localLogger = new LoggerConfiguration()
                 .WriteTo.Trace()
-                .WriteTo.Console()
-                .WriteTo.Sink(new SignalRSink(hubContext,10));
-                                    
-            if(runtimeEnv.RuntimeType == "Windows")
+                .WriteTo.Console().CreateLogger();
+
+            var signalRlogger = new LoggerConfiguration()
+                .WriteTo.Sink(new SignalRSink(hubContext, 10))
+                .MinimumLevel.Warning()
+                .CreateLogger();
+
+            var azureLogger = new LoggerConfiguration()
+                .WriteTo.AzureDocumentDB(new System.Uri("https://openbook.documents.azure.com:443/"), "j4Hzifc5HL6z4uNt152t6ECrI5J7peGpSJDlwfkEzn5Vs94pAxf71N3sw3iQS6YneXC0CvxA+MdQjP/GKVbo6A==")
+                .MinimumLevel.Warning()
+                .CreateLogger();
+
+            if (runtimeEnv.OperatingSystem.Equals("Windows", StringComparison.OrdinalIgnoreCase))
             {
-                loggerConfiguration.WriteTo.AzureDocumentDB(new System.Uri("https://openbook.documents.azure.com:443/"),"j4Hzifc5HL6z4uNt152t6ECrI5J7peGpSJDlwfkEzn5Vs94pAxf71N3sw3iQS6YneXC0CvxA+MdQjP/GKVbo6A==");
+                loggerFactory.AddSerilog(azureLogger);
             }
-            
-            Log.Logger = loggerConfiguration.CreateLogger();
-            Log.Logger.Debug($"environment = {runtimeEnv.RuntimeType}");
-            
+            if (env.IsDevelopment())
+            {
+                loggerFactory.AddSerilog(localLogger);
+            }
+
+            loggerFactory.AddSerilog(signalRlogger);
+            Log.Logger = signalRlogger;
+            loggerFactory.AddSerilog(Log.Logger);
+
+
             //should go at the end
             app.UseMvc();
-            loggerFactory.AddSerilog();
+
         }
     }
 }
