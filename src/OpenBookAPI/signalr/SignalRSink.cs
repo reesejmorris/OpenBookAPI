@@ -31,11 +31,13 @@ namespace Serilog.Sinks.SignalR
         /// <param name="batchPostingLimit">The maximum number of events to post in a single batch.</param>
         /// <param name="period">The time to wait between checking for event batches.</param>
         /// <param name="formatProvider">Supplies culture-specific formatting information, or null.</param>
-        public SignalRSink(IHubContext context, int batchPostingLimit, TimeSpan period, IFormatProvider formatProvider = null)
+        public SignalRSink(IHubContext context, int batchPostingLimit, TimeSpan period = default(TimeSpan), IFormatProvider formatProvider = null)
             : base(batchPostingLimit, period)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
+            if(period == default(TimeSpan))
+                period = TimeSpan.FromSeconds(2);
             _formatProvider = formatProvider;
             _context = context;
         }

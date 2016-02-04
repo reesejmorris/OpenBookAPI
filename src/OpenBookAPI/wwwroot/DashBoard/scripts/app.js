@@ -1,7 +1,7 @@
 'use strict';
 (function(){
     angular.module('angularServiceDashboard', []).
-    value('backendServerUrl', 'http://localhost:5000')
+    value('backendServerUrl', 'http://openbookapi.azurewebsites.net/')
     .factory('backendHubProxy', ['$rootScope', 'backendServerUrl', 
     function ($rootScope, backendServerUrl) {
 

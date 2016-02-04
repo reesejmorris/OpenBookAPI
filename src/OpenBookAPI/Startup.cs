@@ -116,7 +116,7 @@ namespace OpenBookAPI
             var loggerConfiguration = new LoggerConfiguration().MinimumLevel.Information()
                 .WriteTo.Trace()
                 .WriteTo.Console()
-                .WriteTo.Sink(new SignalRSink(hubContext,10,TimeSpan.FromSeconds(10)));
+                .WriteTo.Sink(new SignalRSink(hubContext,10));
                                     
             if(runtimeEnv.RuntimeType == "Windows")
             {
